@@ -245,3 +245,58 @@ body { margin:0; font-family:'DM Sans',sans-serif; }
 .modal-close { color:#12345b; }
 .drawer-heading { border-color:#e4eaf1; }
 .bag-item { border-color:#e4eaf1; }
+
+
+/* KYN KIDS — manchas orgânicas amarelas e verdes */
+.kyn-store .hero-section {
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse 240px 190px at 7% 15%, rgba(255,232,90,.42) 0%, rgba(255,232,90,.18) 48%, transparent 76%),
+    radial-gradient(ellipse 260px 210px at 48% 100%, rgba(155,196,116,.24) 0%, rgba(155,196,116,.10) 52%, transparent 78%),
+    #fffdf2;
+}
+.kyn-store .hero-copy { position:relative; z-index:1; }
+.kyn-store .hero-copy:before {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:150px;
+  height:118px;
+  left:-42px;
+  top:-8px;
+  border-radius:58% 42% 64% 36% / 43% 58% 42% 57%;
+  background:rgba(255,232,90,.28);
+  transform:rotate(-17deg);
+  filter:blur(1px);
+  pointer-events:none;
+}
+.kyn-store .category-section {
+  background:
+    radial-gradient(ellipse 210px 150px at 94% 12%, rgba(156,190,123,.20), transparent 72%),
+    radial-gradient(ellipse 180px 140px at 2% 82%, rgba(255,232,90,.20), transparent 74%);
+}
+.kyn-store .collection-section {
+  background:
+    radial-gradient(ellipse 230px 180px at 100% 5%, rgba(255,232,90,.17), transparent 74%),
+    radial-gradient(ellipse 190px 160px at 0% 68%, rgba(156,190,123,.16), transparent 76%);
+}
+.kyn-store .benefit-bar {
+  background:
+    radial-gradient(ellipse 230px 110px at 12% 50%, rgba(255,255,255,.42), transparent 75%),
+    radial-gradient(ellipse 250px 130px at 88% 50%, rgba(153,190,119,.28), transparent 75%),
+    #fff4a8;
+}
+.kyn-store .about-section {
+  background:
+    radial-gradient(ellipse 170px 130px at 5% 18%, rgba(255,232,90,.22), transparent 75%),
+    radial-gradient(ellipse 220px 150px at 96% 85%, rgba(156,190,123,.20), transparent 76%);
+}
+@media(max-width:800px) {
+  .kyn-store .hero-section {
+    background:
+      radial-gradient(ellipse 190px 145px at 0% 8%, rgba(255,232,90,.34), transparent 76%),
+      radial-gradient(ellipse 210px 160px at 100% 45%, rgba(156,190,123,.19), transparent 76%),
+      #fffdf2;
+  }
+  .kyn-store .hero-copy:before { width:115px; height:92px; left:-18px; top:-15px; }
+}
