@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowDown, ArrowRight, Check, Heart, Instagram, Minus, Plus, Search, ShoppingBag, Sparkles, Truck, X } from "lucide-react";
+import { ArrowDown, ArrowRight, Heart, Instagram, Search, ShoppingBag, Sparkles, Truck, X } from "lucide-react";
 import { products, type StoreProduct } from "@/data/products";
 import { ProductCard } from "@/components/store/ProductCard";
 import { SiteHeader } from "@/components/store/SiteHeader";
@@ -39,11 +39,6 @@ function StoreHome() {
     setBagOpen(true);
   };
   const instagramUrl = "https://www.instagram.com/kynkidsmoda/";
-  const requestBag = () => {
-    const lines = bag.map((item, index) => `${index + 1}. ${item.name} — ${item.age}`).join("%0A");
-    window.open(`${instagramUrl}?`, "_blank", "noopener,noreferrer");
-    if (lines) setBagOpen(false);
-  };
 
   return (
     <div className="kyn-store" id="inicio">
