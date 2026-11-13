@@ -1,4 +1,4 @@
-import type { StoreProduct } from "@/data/products";
+import { formatPrice, startingPrice, type StoreProduct } from "@/data/products";
 import { ArrowUpRight } from "lucide-react";
 
 type Props = { product: StoreProduct; onSelect: (product: StoreProduct) => void };
@@ -12,9 +12,10 @@ export function ProductCard({ product, onSelect }: Props) {
         <span className="product-arrow"><ArrowUpRight size={18} /></span>
       </button>
       <div className="product-info">
-        <span className="product-category">{product.category} · {product.age}</span>
+        <span className="product-category">{product.category}</span>
         <h3>{product.name}</h3>
-        <button className="product-link" onClick={() => onSelect(product)}>Consultar disponibilidade <ArrowUpRight size={15} /></button>
+        <p className="product-price">{product.variants.length > 1 ? "A partir de " : ""}{formatPrice(startingPrice(product))}</p>
+        <button className="product-link" onClick={() => onSelect(product)}>Ver tamanhos <ArrowUpRight size={15} /></button>
       </div>
     </article>
   );

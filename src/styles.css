@@ -374,3 +374,8 @@ body { margin:0; font-family:'DM Sans',sans-serif; }
   }
   .kyn-store .benefit-bar>div { width:calc(50% - 12px); }
 }
+
+.product-price { margin:0 0 9px; font-size:14px; font-weight:600; color:#3f4435; }
+.variant-list { list-style:none; margin:14px 0; padding:0; display:grid; gap:8px; }
+.variant-list li { display:flex; justify-content:space-between; gap:12px; padding:10px 12px; background:#f6f5f0; font-size:13px; }
+.variant-list li span { color:#6b6e63; }

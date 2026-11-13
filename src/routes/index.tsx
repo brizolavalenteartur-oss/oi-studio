@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowDown, ArrowRight, Heart, Instagram, Search, ShoppingBag, Sparkles, Truck, X } from "lucide-react";
-import { products, type StoreProduct } from "@/data/products";
+import { formatPrice, products, startingPrice, type StoreProduct } from "@/data/products";
 import { ProductCard } from "@/components/store/ProductCard";
 import { SiteHeader } from "@/components/store/SiteHeader";
 import { SiteFooter } from "@/components/store/SiteFooter";
@@ -29,7 +29,7 @@ function StoreHome() {
 
   const filteredProducts = useMemo(() => products.filter((product) => {
     const matchesCategory = activeCategory === "Todas" || product.category === activeCategory;
-    const matchesSearch = `${product.name} ${product.category} ${product.age}`.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = `${product.name} ${product.category}`.toLowerCase().includes(search.toLowerCase());
     return matchesCategory && matchesSearch;
   }), [activeCategory, search]);
 
@@ -119,9 +119,9 @@ function StoreHome() {
 
       <SiteFooter />
 
-      {selected && <div className="modal-backdrop" role="presentation" onClick={() => setSelected(null)}><div className="product-modal" role="dialog" aria-modal="true" aria-label={selected.name} onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelected(null)} aria-label="Fechar"><X /></button><img src={selected.image} alt={selected.name} /><div><span className="eyebrow">{selected.category} · {selected.age}</span><h3>{selected.name}</h3><p>{selected.description}</p><p className="modal-availability">Consulte modelos, cores, tamanhos e valores disponíveis.</p><button className="button-primary full-button" onClick={() => addToBag(selected)}>Adicionar à sacola <ShoppingBag size={17} /></button><a className="modal-instagram" href={instagramUrl} target="_blank" rel="noreferrer"><Instagram size={16} /> Ver Instagram da KYN KIDS</a></div></div></div>}
+      {selected && <div className="modal-backdrop" role="presentation" onClick={() => setSelected(null)}><div className="product-modal" role="dialog" aria-modal="true" aria-label={selected.name} onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelected(null)} aria-label="Fechar"><X /></button><img src={selected.image} alt={selected.name} /><div><span className="eyebrow">{selected.category}</span><h3>{selected.name}</h3><ul className="variant-list">{selected.variants.map((variant, i) => <li key={i}><b>{formatPrice(variant.price)}</b><span>Tamanho {variant.sizes}</span></li>)}</ul><p className="modal-availability">Confirme cores e disponibilidade pelo Instagram.</p><button className="button-primary full-button" onClick={() => addToBag(selected)}>Adicionar à sacola <ShoppingBag size={17} /></button><a className="modal-instagram" href={instagramUrl} target="_blank" rel="noreferrer"><Instagram size={16} /> Ver Instagram da KYN KIDS</a></div></div></div>}
 
-      {bagOpen && <div className="drawer-backdrop" onClick={() => setBagOpen(false)}><aside className="bag-drawer" onClick={(event) => event.stopPropagation()}><div className="drawer-heading"><div><span className="eyebrow">SUA SELEÇÃO</span><h3>Sacola <span>({bag.length})</span></h3></div><button onClick={() => setBagOpen(false)} aria-label="Fechar sacola"><X /></button></div>{bag.length === 0 ? <div className="bag-empty"><ShoppingBag size={34} /><p>Sua sacola está vazia.</p><button className="button-primary" onClick={() => setBagOpen(false)}>Explorar coleção</button></div> : <><div className="bag-items">{bag.map((item, index) => <div className="bag-item" key={`${item.id}-${index}`}><img src={item.image} alt="" /><div><b>{item.name}</b><small>{item.age}</small><button onClick={() => setBag((current) => current.filter((_, i) => i !== index))}>Remover</button></div></div>)}</div><div className="bag-bottom"><p>Finalize sua seleção pelo Instagram para confirmar disponibilidade, tamanhos e valores.</p><a className="button-primary full-button" href={instagramUrl} target="_blank" rel="noreferrer" onClick={() => setBagOpen(false)}>Continuar pelo Instagram <ArrowRight size={17} /></a></div></>}</aside></div>}
+      {bagOpen && <div className="drawer-backdrop" onClick={() => setBagOpen(false)}><aside className="bag-drawer" onClick={(event) => event.stopPropagation()}><div className="drawer-heading"><div><span className="eyebrow">SUA SELEÇÃO</span><h3>Sacola <span>({bag.length})</span></h3></div><button onClick={() => setBagOpen(false)} aria-label="Fechar sacola"><X /></button></div>{bag.length === 0 ? <div className="bag-empty"><ShoppingBag size={34} /><p>Sua sacola está vazia.</p><button className="button-primary" onClick={() => setBagOpen(false)}>Explorar coleção</button></div> : <><div className="bag-items">{bag.map((item, index) => <div className="bag-item" key={`${item.id}-${index}`}><img src={item.image} alt="" /><div><b>{item.name}</b><small>A partir de {formatPrice(startingPrice(item))}</small><button onClick={() => setBag((current) => current.filter((_, i) => i !== index))}>Remover</button></div></div>)}</div><div className="bag-bottom"><p>Finalize sua seleção pelo Instagram para confirmar disponibilidade, tamanhos e valores.</p><a className="button-primary full-button" href={instagramUrl} target="_blank" rel="noreferrer" onClick={() => setBagOpen(false)}>Continuar pelo Instagram <ArrowRight size={17} /></a></div></>}</aside></div>}
     </div>
   );
 }
