@@ -156,7 +156,7 @@
 
 
 /* KYN KIDS storefront */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
 :root { --kyn-ink:#292b29; --kyn-muted:#777b73; --kyn-cream:#f6f4ee; --kyn-lime:#d9e7a6; --kyn-pink:#f1d9d5; --kyn-line:#e8e6df; }
 html { scroll-behavior:smooth; }
 body { margin:0; font-family:'DM Sans',sans-serif; }
