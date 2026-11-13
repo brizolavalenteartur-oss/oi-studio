@@ -300,3 +300,77 @@ body { margin:0; font-family:'DM Sans',sans-serif; }
   }
   .kyn-store .hero-copy:before { width:115px; height:92px; left:-18px; top:-15px; }
 }
+
+
+/* KYN KIDS — identidade tricolor forte, sem predominância de branco */
+.kyn-store { background:#ffe85a; }
+.kyn-store .top-strip { background:#12345b; color:#ffe85a; }
+.kyn-store .header-main { background:#1674b8; color:#fff; }
+.kyn-store .brand-mark,.kyn-store .main-nav a,.kyn-store .bag-button { color:#fff; }
+.kyn-store .bag-button b { background:#ffe85a; color:#12345b; }
+.kyn-store .main-nav a:hover { color:#ffe85a; }
+.kyn-store .hero-section {
+  background:
+    radial-gradient(circle at 8% 88%, rgba(22,116,184,.22) 0 105px, transparent 107px),
+    radial-gradient(circle at 92% 12%, rgba(54,139,79,.23) 0 145px, transparent 147px),
+    #ffe85a;
+}
+.kyn-store .hero-copy h1 { color:#12345b; }
+.kyn-store .hero-copy h1 em { color:#1674b8; }
+.kyn-store .eyebrow { color:#245b3b; }
+.kyn-store .hero-copy p { color:#294b63; }
+.kyn-store .hero-note { color:#245b3b; }
+.kyn-store .hero-sticker { background:#368b4f; color:#fff; }
+.kyn-store .button-primary { background:#12345b; color:#ffe85a!important; }
+.kyn-store .button-primary:hover { background:#1674b8; }
+.kyn-store .button-text { color:#12345b; border-color:#12345b; }
+.kyn-store .benefit-bar {
+  background:#368b4f;
+  color:#fff;
+}
+.kyn-store .benefit-bar>div,.kyn-store .benefit-bar span,
+.kyn-store .benefit-bar small { color:#fff; }
+.kyn-store .benefit-bar b { color:#ffe85a; }
+.kyn-store .category-section {
+  background:
+    radial-gradient(ellipse 260px 190px at 96% 8%, rgba(255,232,90,.45), transparent 75%),
+    #d9efcf;
+}
+.kyn-store .section-heading h2,.kyn-store .section-heading h2 em { color:#12345b; }
+.kyn-store .section-heading .eyebrow { color:#368b4f; }
+.kyn-store .collection-section {
+  background:
+    radial-gradient(ellipse 260px 200px at 0% 95%, rgba(54,139,79,.18), transparent 75%),
+    #fff0a3;
+}
+.kyn-store .product-image-wrap { background:#dceeff; }
+.kyn-store .product-info h3 { color:#12345b; }
+.kyn-store .product-category { color:#368b4f; }
+.kyn-store .filter-chip { background:#fff9d9; color:#12345b; border-color:#b9cfad; }
+.kyn-store .filter-chip.active,.kyn-store .filter-chip:hover { background:#12345b; color:#ffe85a; }
+.kyn-store .malinha-section { background:#1674b8; }
+.kyn-store .malinha-copy h2 { color:#fff; }
+.kyn-store .malinha-copy h2 em { color:#ffe85a; }
+.kyn-store .button-light { background:#ffe85a; color:#12345b!important; }
+.kyn-store .about-section {
+  background:
+    radial-gradient(circle at 8% 50%, rgba(255,232,90,.55) 0 115px, transparent 117px),
+    #d9efcf;
+}
+.kyn-store .about-section h2,.kyn-store .about-section h2 em { color:#12345b; }
+.kyn-store .about-section>p { color:#315d49; }
+.kyn-store .about-mark { background:#ffe85a; border:0; color:#12345b; }
+.kyn-store .site-footer { background:#12345b; }
+.kyn-store .product-modal,.kyn-store .bag-drawer { background:#fff9d9; }
+.kyn-store .product-modal h3,.kyn-store .drawer-heading h3 { color:#12345b; }
+.kyn-store .search-field input { color:#12345b; }
+@media(max-width:800px) {
+  .kyn-store .main-nav { background:#1674b8; }
+  .kyn-store .hero-section {
+    background:
+      radial-gradient(circle at 0% 4%, rgba(22,116,184,.22) 0 90px, transparent 92px),
+      radial-gradient(circle at 100% 60%, rgba(54,139,79,.2) 0 110px, transparent 112px),
+      #ffe85a;
+  }
+  .kyn-store .benefit-bar>div { width:calc(50% - 12px); }
+}
