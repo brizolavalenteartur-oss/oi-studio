@@ -1,5 +1,6 @@
 import { Instagram, Menu, ShoppingBag, X } from "lucide-react";
 import { useState } from "react";
+import { KynKidsLogo } from "@/data/brand";
 
 type Props = { cartCount: number; onCart: () => void };
 
@@ -10,7 +11,7 @@ export function SiteHeader({ cartCount, onCart }: Props) {
       <div className="top-strip">MODA INFANTO-JUVENIL · TAMANHOS 1 AO 18 · ENVIO PARA TODO O BRASIL</div>
       <div className="header-main">
         <button className="mobile-menu" aria-label="Abrir menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
-        <a href="#inicio" className="brand-mark"><span>KYN</span><small>KIDS</small></a>
+        <a href="#inicio" className="brand-mark logo-link" aria-label="KYN KIDS - início"><KynKidsLogo className="kyn-logo-header" /></a>
         <nav className={menuOpen ? "main-nav is-open" : "main-nav"}>
           <a href="#colecao" onClick={() => setMenuOpen(false)}>Coleção</a>
           <a href="#categorias" onClick={() => setMenuOpen(false)}>Categorias</a>
