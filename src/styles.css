@@ -199,3 +199,49 @@ body { margin:0; font-family:'DM Sans',sans-serif; }
 .kyn-logo-header { display:block; width:92px; height:76px; object-fit:contain; }
 .kyn-logo-footer { display:block; width:100px; height:100px; object-fit:contain; }
 @media(max-width:800px) { .kyn-logo-header { width:78px; height:66px; } }
+
+
+/* KYN KIDS — identidade azul e amarelo */
+:root {
+  --kyn-ink:#12345b;
+  --kyn-muted:#61748b;
+  --kyn-cream:#fff9d9;
+  --kyn-lime:#ffe85a;
+  --kyn-pink:#dceeff;
+  --kyn-line:#e4eaf1;
+}
+.kyn-store { color:#12345b; background:#fff; }
+.top-strip { background:#12345b; color:#ffe85a; }
+.header-main { background:#fff; }
+.brand-mark { color:#12345b; }
+.main-nav a:hover,.product-link:hover { color:#1674b8; }
+.bag-button { color:#12345b; }
+.bag-button b { background:#ffe85a; color:#12345b; }
+.hero-section { background:#fffdf2; }
+.hero-copy h1 em,.section-heading h2 em,.about-section h2 em { color:#1674b8; }
+.button-primary { background:#ffe85a; color:#12345b!important; }
+.button-primary:hover { background:#f3d62e; }
+.button-text { color:#12345b; border-color:#1674b8; }
+.note-dot { background:#1674b8; }
+.hero-sticker { background:#ffe85a; color:#12345b; }
+.benefit-bar { background:#fff4a8; }
+.benefit-bar>div { color:#1674b8; }
+.category-tile { background:#dceeff; }
+.filter-chip.active,.filter-chip:hover { background:#12345b; color:#ffe85a; border-color:#12345b; }
+.product-tag,.product-arrow { background:#ffe85a; color:#12345b; }
+.product-link { color:#1674b8; border-color:#8db9dc; }
+.malinha-section { background:#1674b8; }
+.malinha-copy .eyebrow,.malinha-copy p,.malinha-copy>small { color:#eef7ff; }
+.malinha-copy h2 em { color:#ffe85a; }
+.button-light { background:#ffe85a; color:#12345b!important; }
+.button-light:hover { background:#f3d62e; }
+.about-mark { border-color:#a9cce8; color:#1674b8; }
+.about-mark span { color:#e2c82e; }
+.site-footer { background:#12345b; color:#fff; }
+.footer-main p,.footer-main a:not(.brand-mark) { color:#d7e8f7; }
+.footer-bottom { border-color:#315477; color:#b8cde0; }
+.search-field { color:#1674b8; border-color:#a9cce8; }
+.search-field input { background:transparent; }
+.modal-close { color:#12345b; }
+.drawer-heading { border-color:#e4eaf1; }
+.bag-item { border-color:#e4eaf1; }
