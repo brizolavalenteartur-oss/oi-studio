@@ -12,6 +12,7 @@ export type CheckoutItem = {
 type Props = {
   items: CheckoutItem[];
   onClose: () => void;
+  onSuccess: () => void;
 };
 
 type CustomerForm = {
@@ -32,7 +33,7 @@ const initialCustomer: CustomerForm = {
   address_number: "", complement: "", neighborhood: "", city: "Caxias do Sul", state: "RS",
 };
 
-export function CheckoutModal({ items, onClose }: Props) {
+export function CheckoutModal({ items, onClose, onSuccess }: Props) {
   const [customer, setCustomer] = useState<CustomerForm>(initialCustomer);
   const [paymentMethod, setPaymentMethod] = useState<"pix" | "credit" | "debit">("pix");
   const [deliveryMethod, setDeliveryMethod] = useState<"shipping" | "malinha">("shipping");
@@ -50,7 +51,7 @@ export function CheckoutModal({ items, onClose }: Props) {
     setError("");
     setLoading(true);
     try {
-      const { data, error: submitError } = await supabase.rpc("submit_store_order", {
+      const { data, error: submitError } = await (supabase as any).rpc("submit_store_order", {
         p_customer: customer,
         p_items: items.map((item) => ({
           product_id: item.product.id,
@@ -64,6 +65,7 @@ export function CheckoutModal({ items, onClose }: Props) {
       const result = data as { order_number?: string } | null;
       if (!result?.order_number) throw new Error("O pedido foi enviado, mas não recebemos o número de confirmação.");
       setOrderNumber(result.order_number);
+      onSuccess();
     } catch (cause) {
       console.error("KYN KIDS checkout:", cause);
       setError(cause instanceof Error ? cause.message : "Não foi possível enviar o pedido. Tente novamente.");
