@@ -195,7 +195,10 @@ begin
   if p_delivery_method = 'malinha' and lower(coalesce(p_customer->>'city','')) not like '%caxias do sul%' then
     raise exception 'A malinha gratuita está disponível somente em Caxias do Sul';
   end if;
-  if jsonb_typeof(p_items) <> 'array' or jsonb_array_length(p_items) < 1 or jsonb_array_length(p_items) > 50 then
+  if jsonb_typeof(p_items) <> 'array' then
+    raise exception 'Carrinho inválido';
+  end if;
+  if jsonb_array_length(p_items) < 1 or jsonb_array_length(p_items) > 50 then
     raise exception 'Carrinho inválido';
   end if;
   if coalesce(trim(p_customer->>'name'),'') = '' or coalesce(trim(p_customer->>'email'),'') = ''
@@ -258,3 +261,8 @@ $$;
 
 revoke all on function public.submit_store_order(jsonb,jsonb,text,text) from public;
 grant execute on function public.submit_store_order(jsonb,jsonb,text,text) to anon, authenticated;
+
+-- Permissões SQL explícitas; RLS continua controlando quais linhas cada perfil acessa.
+grant select on public.store_catalog_variants to anon, authenticated;
+grant select on public.store_admins, public.store_orders, public.store_order_items to authenticated;
+grant update on public.store_orders to authenticated;
