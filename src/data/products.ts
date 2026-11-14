@@ -18,7 +18,7 @@ export const startingPrice = (product: StoreProduct) =>
 /** Catálogo KYN KIDS (63 peças) importado do arquivo Word. */
 export const products: StoreProduct[] = [
   { id: "produto-01", name: "Blusa básica pink", category: "Meninas", image: "/images/produtos/produto-01.jpg", variants: [{"price": 30.29, "sizes": "2/1"}, {"price": 36.0, "sizes": "8/10"}] },
-  { id: "produto-02", name: "Vestido com calcinha rosa", category: "Bebês", image: "/images/produtos/produto-02.jpg", variants: [{"price": 108.0, "sizes": "2"}] },
+  { id: "produto-02", name: "Conjunto feminino rosa", category: "Conjuntos", image: "/images/produtos/produto-02.jpg", variants: [{"price": 108.0, "sizes": "2"}] },
   { id: "produto-03", name: "Conjunto elefantinho blusa e legging", category: "Conjuntos", image: "/images/produtos/produto-03.jpg", variants: [{"price": 65.21, "sizes": "G"}, {"price": 74.45, "sizes": "3 -2 PEÇAS"}] },
   { id: "produto-04", name: "Macacão curto rosa", category: "Bebês", image: "/images/produtos/produto-04.jpg", variants: [{"price": 99.9, "sizes": "M/G"}] },
   { id: "produto-05", name: "Bermuda ciclista pink", category: "Meninas", image: "/images/produtos/produto-05.jpg", variants: [{"price": 25.37, "sizes": "2/3"}] },
@@ -79,5 +79,5 @@ export const products: StoreProduct[] = [
   { id: "produto-60", name: "Camiseta branca básica", category: "Meninos", image: "/images/produtos/produto-60.jpg", variants: [{"price": 40.0, "sizes": "6/8/12/14"}] },
   { id: "produto-61", name: "Camiseta preta básica", category: "Meninos", image: "/images/produtos/produto-61.jpg", variants: [{"price": 47.0, "sizes": "6/8/12"}] },
   { id: "produto-62", name: "Camiseta amarela estampada", category: "Meninos", image: "/images/produtos/produto-62.jpg", variants: [{"price": 93.0, "sizes": "8"}] },
-  { id: "produto-63", name: "Camiseta henley azul", category: "Meninos", image: "/images/produtos/produto-63.jpg", variants: [{"price": 200.0, "sizes": "14/12"}] },
+  { id: "produto-63", name: "Conjunto masculino azul", category: "Conjuntos", image: "/images/produtos/produto-63.jpg", variants: [{"price": 200.0, "sizes": "14/12"}] },
 ];
