@@ -98,7 +98,7 @@ function StoreHome() {
             {categories.map((category) => <button key={category} className={activeCategory === category ? "filter-chip active" : "filter-chip"} onClick={() => setActiveCategory(category)}>{category}</button>)}
           </div>
           <div className="products-grid">
-            {filteredProducts.map((product) => <ProductCard key={product.id} product={product} onSelect={setSelected} />)}
+            {filteredProducts.map((product) => <ProductCard key={product.id} product={product} onSelect={(item) => { setSelectedVariantIndex(0); setSelected(item); }} />)}
           </div>
           {filteredProducts.length === 0 && <div className="empty-state">Não encontramos resultados. Tente outra busca ou categoria.</div>}
           <p className="catalog-note">As imagens são referências ilustrativas. Consulte pelo Instagram os modelos disponíveis, tamanhos, cores e valores atualizados.</p>
