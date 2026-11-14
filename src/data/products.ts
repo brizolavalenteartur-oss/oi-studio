@@ -54,7 +54,7 @@ export const products: StoreProduct[] = [
   { id: "produto-35", name: "Conjunto branco regata e calça", category: "Conjuntos", image: "/images/produtos/produto-35.jpg", variants: [{"price": 282.79, "sizes": "10"}] },
   { id: "produto-36", name: "Conjunto tropical blusa e short", category: "Conjuntos", image: "/images/produtos/produto-36.jpg", variants: [{"price": 166.0, "sizes": "16/14"}] },
   { id: "produto-37", name: "Conjunto cropped e short pink", category: "Conjuntos", image: "/images/produtos/produto-37.jpg", variants: [{"price": 115.4, "sizes": "10"}] },
-  { id: "produto-38", name: "Bermuda ciclista preta", category: "Meninas", image: "/images/produtos/produto-38.jpg", variants: [{"price": 37.0, "sizes": "14"}] },
+  { id: "produto-38", name: "Bermuda ciclista preta", category: "Meninos", image: "/images/produtos/produto-38.jpg", variants: [{"price": 37.0, "sizes": "14"}] },
   { id: "produto-39", name: "Blusa canelada decote V", category: "Meninas", image: "/images/produtos/produto-39.jpg", variants: [{"price": 58.48, "sizes": "14"}] },
   { id: "produto-40", name: "Vestido amarelo lima com babados", category: "Meninas", image: "/images/produtos/produto-40.jpg", variants: [{"price": 100.0, "sizes": "12"}] },
   { id: "produto-41", name: "Camiseta aranha vermelha", category: "Meninos", image: "/images/produtos/produto-41.jpg", variants: [{"price": 47.0, "sizes": "2/4/6"}] },
