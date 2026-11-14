@@ -22,3 +22,8 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+
+## KYN KIDS — pedidos e painel administrativo
+
+Consulte [docs/ATIVAR-CHECKOUT-KYN-KIDS.md](docs/ATIVAR-CHECKOUT-KYN-KIDS.md) para aplicar o banco de pedidos, cadastrar a conta administradora e configurar o checkout. O painel privado fica em `/admin` após essa configuração.
