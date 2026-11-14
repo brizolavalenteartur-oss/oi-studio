@@ -106,7 +106,7 @@ function StoreHome() {
             {filteredProducts.map((product) => <ProductCard key={product.id} product={product} onSelect={(item) => { setSelectedVariantIndex(0); setSelected(item); }} />)}
           </div>
           {filteredProducts.length === 0 && <div className="empty-state">Não encontramos resultados. Tente outra busca ou categoria.</div>}
-          <p className="catalog-note">As imagens são referências ilustrativas. Consulte pelo Instagram os modelos disponíveis, tamanhos, cores e valores atualizados.</p>
+          <p className="catalog-note">Confira os tamanhos e valores de cada peça ao selecionar o produto. A disponibilidade será confirmada pela loja após o recebimento do pedido.</p>
         </section>
 
         <section className="malinha-section" id="malinha">
@@ -135,7 +135,7 @@ function StoreHome() {
 <div className="drawer-heading"><div><span className="eyebrow">SUA SELEÇÃO</span><h3>Sacola <span>({bag.length})</span></h3></div><button onClick={() => setBagOpen(false)} aria-label="Fechar sacola"><X /></button></div>
 {bag.length === 0 ? <div className="bag-empty"><ShoppingBag size={34} /><p>Sua sacola está vazia.</p><button className="button-primary" onClick={() => setBagOpen(false)}>Explorar coleção</button></div> : <><div className="bag-items">{bag.map((item, index) => <div className="bag-item" key={`${item.product.id}-${index}`}><img src={item.product.image} alt="" /><div><b>{item.product.name}</b><small>Tamanho {item.variant.sizes} · {formatPrice(item.variant.price)}</small><button onClick={() => setBag((current) => current.filter((_, i) => i !== index))}>Remover</button></div></div>)}</div>
 <div className="bag-checkout"><div className="bag-total"><span>Total dos produtos</span><strong>{formatPrice(bagTotal)}</strong></div><button className="button-primary full-button" onClick={() => { setBagOpen(false); setCheckoutOpen(true); }}>Finalizar compra <ArrowRight size={17} /></button><p className="payment-notice">Informe seus dados e endereço para registrar o pedido diretamente na loja.</p></div></>}</aside></div>}
-      {checkoutOpen && <CheckoutModal items={bag} onClose={() => setCheckoutOpen(false)} />}
+      {checkoutOpen && <CheckoutModal items={bag} onClose={() => setCheckoutOpen(false)} onSuccess={() => setBag([])} />}
     </div>
   );
 }
