@@ -5,6 +5,7 @@ import { formatPrice, products, type ProductVariant, type StoreProduct } from "@
 import { ProductCard } from "@/components/store/ProductCard";
 import { SiteHeader } from "@/components/store/SiteHeader";
 import { SiteFooter } from "@/components/store/SiteFooter";
+import { CheckoutModal } from "@/components/store/CheckoutModal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -27,11 +28,11 @@ const categories = ["Todas", "Meninas", "Meninos", "Bebês", "Conjuntos"];
 function StoreHome() {
   const [activeCategory, setActiveCategory] = useState("Todas");
   const [search, setSearch] = useState("");
-  const [bag, setBag] = useState<{ product: StoreProduct; variant: ProductVariant }[]>([]);
+  const [bag, setBag] = useState<{ product: StoreProduct; variant: ProductVariant; variantIndex: number }[]>([]);
   const [bagOpen, setBagOpen] = useState(false);
   const [selected, setSelected] = useState<StoreProduct | null>(null);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState<"pix" | "credit" | "debit" | "">("");
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const filteredProducts = useMemo(() => products.filter((product) => {
     const matchesCategory = activeCategory === "Todas" || product.category === activeCategory;
@@ -41,8 +42,8 @@ function StoreHome() {
 
   const bagTotal = bag.reduce((total, item) => total + item.variant.price, 0);
 
-  const addToBag = (product: StoreProduct, variant: ProductVariant) => {
-    setBag((current) => [...current, { product, variant }]);
+  const addToBag = (product: StoreProduct, variant: ProductVariant, variantIndex: number) => {
+    setBag((current) => [...current, { product, variant, variantIndex }]);
     setSelected(null);
     setSelectedVariantIndex(0);
     setBagOpen(true);
@@ -128,9 +129,13 @@ function StoreHome() {
 
       <SiteFooter />
 
-      {selected && <div className="modal-backdrop" role="presentation" onClick={() => setSelected(null)}><div className="product-modal" role="dialog" aria-modal="true" aria-label={selected.name} onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelected(null)} aria-label="Fechar"><X /></button><img src={selected.image} alt={selected.name} /><div><span className="eyebrow">{selected.category}</span><h3>{selected.name}</h3><p className="variant-label">Escolha o tamanho e confira o valor:</p><div className="variant-options">{selected.variants.map((variant, i) => <button type="button" key={i} className={selectedVariantIndex === i ? "variant-option selected" : "variant-option"} onClick={() => setSelectedVariantIndex(i)}><span>Tamanho {variant.sizes}</span><b>{formatPrice(variant.price)}</b></button>)}</div><p className="modal-availability">Confirme cores e disponibilidade antes de concluir o pedido.</p><button className="button-primary full-button" onClick={() => { const variant = selected.variants[selectedVariantIndex]; if (variant) addToBag(selected, variant); }}>Adicionar à sacola <ShoppingBag size={17} /></button><a className="modal-instagram" href={instagramUrl} target="_blank" rel="noreferrer"><Instagram size={16} /> Ver Instagram da KYN KIDS</a></div></div></div>}
+      {selected && <div className="modal-backdrop" role="presentation" onClick={() => setSelected(null)}><div className="product-modal" role="dialog" aria-modal="true" aria-label={selected.name} onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSelected(null)} aria-label="Fechar"><X /></button><img src={selected.image} alt={selected.name} /><div><span className="eyebrow">{selected.category}</span><h3>{selected.name}</h3><p className="variant-label">Escolha o tamanho e confira o valor:</p><div className="variant-options">{selected.variants.map((variant, i) => <button type="button" key={i} className={selectedVariantIndex === i ? "variant-option selected" : "variant-option"} onClick={() => setSelectedVariantIndex(i)}><span>Tamanho {variant.sizes}</span><b>{formatPrice(variant.price)}</b></button>)}</div><p className="modal-availability">Confirme cores e disponibilidade antes de concluir o pedido.</p><button className="button-primary full-button" onClick={() => { const variant = selected.variants[selectedVariantIndex]; if (variant) addToBag(selected, variant, selectedVariantIndex); }}>Adicionar à sacola <ShoppingBag size={17} /></button><a className="modal-instagram" href={instagramUrl} target="_blank" rel="noreferrer"><Instagram size={16} /> Ver Instagram da KYN KIDS</a></div></div></div>}
 
-      {bagOpen && <div className="drawer-backdrop" onClick={() => setBagOpen(false)}><aside className="bag-drawer" onClick={(event) => event.stopPropagation()}><div className="drawer-heading"><div><span className="eyebrow">SUA SELEÇÃO</span><h3>Sacola <span>({bag.length})</span></h3></div><button onClick={() => setBagOpen(false)} aria-label="Fechar sacola"><X /></button></div>{bag.length === 0 ? <div className="bag-empty"><ShoppingBag size={34} /><p>Sua sacola está vazia.</p><button className="button-primary" onClick={() => setBagOpen(false)}>Explorar coleção</button></div> : <><div className="bag-items">{bag.map((item, index) => <div className="bag-item" key={`${item.product.id}-${index}`}><img src={item.product.image} alt="" /><div><b>{item.product.name}</b><small>Tamanho {item.variant.sizes} · {formatPrice(item.variant.price)}</small><button onClick={() => setBag((current) => current.filter((_, i) => i !== index))}>Remover</button></div></div>)}</div><div className="bag-checkout"><div className="bag-total"><span>Total dos produtos</span><strong>{formatPrice(bagTotal)}</strong></div><h4>Forma de pagamento</h4><div className="payment-options"><label className={paymentMethod === "pix" ? "payment-option selected" : "payment-option"}><input type="radio" name="payment" value="pix" checked={paymentMethod === "pix"} onChange={() => setPaymentMethod("pix")} /><span><b>Pix</b><small>Pagamento via Pix</small></span></label><label className={paymentMethod === "credit" ? "payment-option selected" : "payment-option"}><input type="radio" name="payment" value="credit" checked={paymentMethod === "credit"} onChange={() => setPaymentMethod("credit")} /><span><b>Cartão de crédito</b><small>Consulte parcelamento</small></span></label><label className={paymentMethod === "debit" ? "payment-option selected" : "payment-option"}><input type="radio" name="payment" value="debit" checked={paymentMethod === "debit"} onChange={() => setPaymentMethod("debit")} /><span><b>Cartão de débito</b><small>Pagamento no débito</small></span></label></div><p className="payment-notice">A forma de pagamento será confirmada pela loja. O pagamento online ainda precisa ser conectado a um intermediador.</p><a className="button-primary full-button" href={instagramUrl} target="_blank" rel="noreferrer" onClick={() => setBagOpen(false)}>Continuar pedido <ArrowRight size={17} /></a></div></>}</aside></div>}
+      {bagOpen && <div className="drawer-backdrop" onClick={() => setBagOpen(false)}><aside className="bag-drawer" onClick={(event) => event.stopPropagation()}>
+<div className="drawer-heading"><div><span className="eyebrow">SUA SELEÇÃO</span><h3>Sacola <span>({bag.length})</span></h3></div><button onClick={() => setBagOpen(false)} aria-label="Fechar sacola"><X /></button></div>
+{bag.length === 0 ? <div className="bag-empty"><ShoppingBag size={34} /><p>Sua sacola está vazia.</p><button className="button-primary" onClick={() => setBagOpen(false)}>Explorar coleção</button></div> : <><div className="bag-items">{bag.map((item, index) => <div className="bag-item" key={`${item.product.id}-${index}`}><img src={item.product.image} alt="" /><div><b>{item.product.name}</b><small>Tamanho {item.variant.sizes} · {formatPrice(item.variant.price)}</small><button onClick={() => setBag((current) => current.filter((_, i) => i !== index))}>Remover</button></div></div>)}</div>
+<div className="bag-checkout"><div className="bag-total"><span>Total dos produtos</span><strong>{formatPrice(bagTotal)}</strong></div><button className="button-primary full-button" onClick={() => { setBagOpen(false); setCheckoutOpen(true); }}>Finalizar compra <ArrowRight size={17} /></button><p className="payment-notice">Informe seus dados e endereço para registrar o pedido diretamente na loja.</p></div></>}</aside></div>}
+      {checkoutOpen && <CheckoutModal items={bag} onClose={() => setCheckoutOpen(false)} />}
     </div>
   );
 }
