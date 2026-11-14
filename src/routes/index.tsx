@@ -81,8 +81,8 @@ function StoreHome() {
             <p>Looks para brincar, passear, celebrar e ser quem se é.</p>
           </div>
           <div className="category-grid">
-            <a className="category-tile tile-girls" href="#colecao" onClick={() => setActiveCategory("Meninas")}><img src="https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=900&q=85" alt="Moda infantil feminina" /><span>01 / MENINAS</span><strong>Cheias de atitude <ArrowRight size={17} /></strong></a>
-            <a className="category-tile tile-boys" href="#colecao" onClick={() => setActiveCategory("Meninos")}><img src="https://images.unsplash.com/photo-1503919005314-30d93d07d823?auto=format&fit=crop&w=900&q=85" alt="Moda infantil masculina" /><span>02 / MENINOS</span><strong>Prontos para tudo <ArrowRight size={17} /></strong></a>
+            <a className="category-tile tile-girls" href="#colecao" onClick={() => setActiveCategory("Meninas")}><img src="/images/categoria-meninas.webp" alt="Moda infantil feminina" /><span>01 / MENINAS</span><strong>Cheias de atitude <ArrowRight size={17} /></strong></a>
+            <a className="category-tile tile-boys" href="#colecao" onClick={() => setActiveCategory("Meninos")}><img src="/images/categoria-meninos.webp" alt="Moda infantil masculina" /><span>02 / MENINOS</span><strong>Prontos para tudo <ArrowRight size={17} /></strong></a>
             <a className="category-tile tile-babies" href="#colecao" onClick={() => setActiveCategory("Bebês")}><img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=85" alt="Roupas para bebês" /><span>03 / PEQUENOS</span><strong>Conforto em cada detalhe <ArrowRight size={17} /></strong></a>
           </div>
         </section>
