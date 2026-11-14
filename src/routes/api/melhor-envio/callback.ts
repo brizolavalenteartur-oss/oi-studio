@@ -1,47 +1,52 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { exchangeAuthorizationCode } from "@/lib/melhor-envio.server";
+
+const REDIRECT_URI = process.env.MELHOR_ENVIO_REDIRECT_URI
+  || "https://kynkids.vercel.app/api/melhor-envio/callback";
+
+function clearStateCookie() {
+  return "kyn_me_oauth_state=; HttpOnly; Secure; SameSite=Lax; Path=/api/melhor-envio/callback; Max-Age=0";
+}
+
+function redirectToAdmin(request: Request, result: "connected" | "error") {
+  const destination = new URL("/admin", request.url);
+  destination.searchParams.set("melhor_envio", result);
+  return new Response(null, {
+    status: 303,
+    headers: {
+      Location: destination.toString(),
+      "Set-Cookie": clearStateCookie(),
+      "Cache-Control": "no-store",
+    },
+  });
+}
 
 export const Route = createFileRoute("/api/melhor-envio/callback")({
   server: {
     handlers: {
       GET: async ({ request }) => {
         const url = new URL(request.url);
-        const authorizationError = url.searchParams.get("error");
+        const cookieHeader = request.headers.get("cookie") || "";
+        const stateCookie = cookieHeader
+          .split(";")
+          .map((part) => part.trim())
+          .find((part) => part.startsWith("kyn_me_oauth_state="))
+          ?.slice("kyn_me_oauth_state=".length);
+        const returnedState = url.searchParams.get("state");
+        const code = url.searchParams.get("code");
+        const providerError = url.searchParams.get("error");
 
-        if (authorizationError) {
-          return new Response(
-            "A autorização do Melhor Envio não foi concluída. Você pode fechar esta página e tentar novamente pelo painel da KYN KIDS.",
-            {
-              status: 400,
-              headers: { "content-type": "text/plain; charset=utf-8" },
-            },
-          );
+        if (providerError || !stateCookie || !returnedState || stateCookie !== returnedState || !code) {
+          return redirectToAdmin(request, "error");
         }
 
-        // The endpoint is reserved for the OAuth callback. Token exchange and
-        // secure persistence must be enabled before anyone authorizes the app.
-        if (url.searchParams.has("code")) {
-          return new Response(
-            "O retorno de autorização foi recebido, mas a integração ainda não está habilitada. Não tente conectar a conta até a configuração do servidor ser concluída.",
-            {
-              status: 503,
-              headers: {
-                "content-type": "text/plain; charset=utf-8",
-                "cache-control": "no-store",
-              },
-            },
-          );
+        try {
+          await exchangeAuthorizationCode(code, REDIRECT_URI);
+          return redirectToAdmin(request, "connected");
+        } catch (error) {
+          console.error("[Melhor Envio] Falha no callback OAuth:", error);
+          return redirectToAdmin(request, "error");
         }
-
-        return new Response(
-          "Endpoint de retorno do Melhor Envio da KYN KIDS. A integração ainda está em configuração.",
-          {
-            status: 200,
-            headers: {
-              "content-type": "text/plain; charset=utf-8",
-              "cache-control": "no-store",
-            },
-          },
-        );
       },
     },
   },
