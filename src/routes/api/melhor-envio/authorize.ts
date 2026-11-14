@@ -20,9 +20,9 @@ export const Route = createFileRoute("/api/melhor-envio/authorize")({
           const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
           const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
           const clientId = process.env.MELHOR_ENVIO_CLIENT_ID;
-          if (!supabaseUrl || !publishableKey || !clientId || !process.env.MELHOR_ENVIO_CLIENT_SECRET || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          if (!supabaseUrl || !publishableKey || !clientId || !process.env.MELHOR_ENVIO_CLIENT_SECRET || !process.env.MELHOR_ENVIO_USER_AGENT || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
             return Response.json({
-              error: "Falta configurar variáveis privadas do servidor no Vercel: SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_SERVICE_ROLE_KEY, MELHOR_ENVIO_CLIENT_ID e MELHOR_ENVIO_CLIENT_SECRET.",
+              error: "Falta configurar variáveis privadas do servidor no Vercel: SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_SERVICE_ROLE_KEY, MELHOR_ENVIO_CLIENT_ID, MELHOR_ENVIO_CLIENT_SECRET e MELHOR_ENVIO_USER_AGENT.",
             }, { status: 503 });
           }
 
