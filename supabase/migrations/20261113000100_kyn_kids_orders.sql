@@ -204,7 +204,7 @@ begin
   if coalesce(trim(p_customer->>'name'),'') = '' or coalesce(trim(p_customer->>'email'),'') = ''
     or coalesce(trim(p_customer->>'phone'),'') = '' or coalesce(trim(p_customer->>'zip_code'),'') = ''
     or coalesce(trim(p_customer->>'address_line'),'') = '' or coalesce(trim(p_customer->>'address_number'),'') = ''
-    or coalesce(trim(p_customer->>'neighborhood'),'') = '' or coalesce(trim(p_customer->>'city'),'')
+    or coalesce(trim(p_customer->>'neighborhood'),'') = '' or coalesce(trim(p_customer->>'city'),'') = ''
     or coalesce(trim(p_customer->>'state'),'') = '' then
     raise exception 'Preencha todos os dados obrigatórios de entrega';
   end if;
