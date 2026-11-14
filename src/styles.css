@@ -379,3 +379,25 @@ body { margin:0; font-family:'DM Sans',sans-serif; }
 .variant-list { list-style:none; margin:14px 0; padding:0; display:grid; gap:8px; }
 .variant-list li { display:flex; justify-content:space-between; gap:12px; padding:10px 12px; background:#f6f5f0; font-size:13px; }
 .variant-list li span { color:#6b6e63; }
+
+
+/* Sacola: subtotal, seleção de tamanho e meios de pagamento */
+.variant-label { margin:12px 0 8px!important; color:#12345b!important; font-weight:600; }
+.variant-options { display:grid; gap:8px; }
+.variant-option { display:flex; justify-content:space-between; align-items:center; gap:10px; width:100%; padding:12px; border:1px solid #d5e2ec; background:#fff; color:#12345b; text-align:left; font-size:12px!important; }
+.variant-option.selected { border:2px solid #1674b8; background:#eaf5ff; }
+.variant-option b { white-space:nowrap; }
+.bag-checkout { border-top:1px solid #d5e2ec; padding-top:16px; }
+.bag-total { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px; color:#12345b; font-size:13px; }
+.bag-total strong { font-size:23px; }
+.bag-checkout h4 { margin:0 0 10px; color:#12345b; font-size:12px; }
+.payment-options { display:grid; gap:8px; }
+.payment-option { display:flex; align-items:center; gap:11px; border:1px solid #d5e2ec; background:#fff; padding:11px 12px; cursor:pointer; color:#12345b; }
+.payment-option.selected { border:2px solid #1674b8; background:#eaf5ff; padding:10px 11px; }
+.payment-option input { accent-color:#1674b8; }
+.payment-option span { display:flex; flex-direction:column; gap:3px; }
+.payment-option b { font-size:12px; }
+.payment-option small { color:#6b7e90; font-size:10px; }
+.payment-notice { color:#6b7e90; font-size:10px; line-height:1.6; margin:12px 0; }
+.bag-checkout .button-primary { margin-top:3px; }
+@media(max-width:800px) { .bag-drawer { overflow:hidden; } .bag-items { min-height:100px; } }
