@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const REDIRECT_URI = process.env.MELHOR_ENVIO_REDIRECT_URI
   || "https://kynkids.vercel.app/api/melhor-envio/callback";
@@ -36,7 +35,8 @@ export const Route = createFileRoute("/api/melhor-envio/authorize")({
             return Response.json({ error: "Sua sessão expirou. Entre novamente no painel." }, { status: 401 });
           }
 
-          const { data: admin, error: adminError } = await supabaseAdmin
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { data: admin, error: adminError } = await (supabaseAdmin as any)
             .from("store_admins")
             .select("user_id")
             .eq("user_id", userId)
