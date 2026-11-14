@@ -23,6 +23,8 @@ function AdminPage() {
   const [loading,setLoading] = useState(false);
   const [error,setError] = useState("");
   const [ready,setReady] = useState(false);
+  const [connectingShipping,setConnectingShipping] = useState(false);
+  const [shippingMessage,setShippingMessage] = useState("");
 
   const loadOrders = async () => {
     setLoading(true); setError("");
@@ -41,12 +43,39 @@ function AdminPage() {
   };
 
   useEffect(() => { void loadOrders(); }, []);
+  useEffect(() => {
+    const result = new URLSearchParams(window.location.search).get("melhor_envio");
+    if (result === "connected") setShippingMessage("Conta do Melhor Envio conectada. Os tokens foram recebidos e salvos no servidor.");
+    if (result === "error") setShippingMessage("Não foi possível conectar. Confira as configurações do servidor e tente novamente.");
+    if (result) window.history.replaceState({}, "", window.location.pathname);
+  }, []);
 
   const signIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); setLoading(true); setError("");
     const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
     if (authError) { setError("E-mail ou senha inválidos."); setLoading(false); return; }
     await loadOrders();
+  };
+  const connectMelhorEnvio = async () => {
+    setConnectingShipping(true);
+    setShippingMessage("");
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
+      if (!accessToken) throw new Error("Sua sessão expirou. Entre novamente no painel.");
+      const response = await fetch("/api/melhor-envio/authorize", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const payload = await response.json().catch(() => ({})) as { authorizationUrl?: string; error?: string };
+      if (!response.ok || !payload.authorizationUrl) {
+        throw new Error(payload.error || "Não foi possível iniciar a conexão.");
+      }
+      window.location.assign(payload.authorizationUrl);
+    } catch (cause) {
+      setShippingMessage(cause instanceof Error ? cause.message : "Falha ao iniciar a conexão.");
+      setConnectingShipping(false);
+    }
   };
   const signOut = async () => { await supabase.auth.signOut(); setSessionEmail(""); setOrders([]); };
   const updateStatus = async (id:string, status:string) => {
@@ -69,7 +98,8 @@ function AdminPage() {
         </form>
       ) : (
         <section className="admin-content">
-          <div className="admin-title"><div><span className="eyebrow">ÁREA RESTRITA · {sessionEmail}</span><h1>Pedidos recebidos</h1><p>Endereços, itens, pagamento e andamento de cada compra.</p></div><button onClick={()=>void loadOrders()}><RefreshCw size={16}/> Atualizar</button></div>
+          <div className="admin-title"><div><span className="eyebrow">ÁREA RESTRITA · {sessionEmail}</span><h1>Pedidos recebidos</h1><p>Endereços, itens, pagamento e andamento de cada compra.</p></div><div className="admin-title-actions"><button onClick={()=>void connectMelhorEnvio()} disabled={connectingShipping}>{connectingShipping ? "Conectando..." : "Conectar Melhor Envio"}</button><button onClick={()=>void loadOrders()}><RefreshCw size={16}/> Atualizar</button></div></div>
+          {shippingMessage && <p className="admin-shipping-message" role="status">{shippingMessage}</p>}
           {error && <p className="admin-error">{error}</p>}
           {loading ? <p>Carregando pedidos...</p> : orders.length === 0 ? <div className="admin-empty">Nenhum pedido recebido ainda.</div> : <div className="admin-orders">{orders.map(order=>(
             <article className="admin-order" key={order.id}>
