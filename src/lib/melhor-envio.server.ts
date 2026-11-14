@@ -27,7 +27,7 @@ async function requestToken(body: URLSearchParams): Promise<TokenResponse> {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/x-www-form-urlencoded",
-      "User-Agent": process.env.MELHOR_ENVIO_USER_AGENT || "KYN KIDS (tatianazanottob@gmail.com)",
+      "User-Agent": requiredEnv("MELHOR_ENVIO_USER_AGENT"),
     },
     body,
     signal: AbortSignal.timeout(15000),
