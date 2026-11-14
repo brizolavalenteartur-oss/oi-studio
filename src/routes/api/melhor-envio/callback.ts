@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { exchangeAuthorizationCode } from "@/lib/melhor-envio.server";
 
 const REDIRECT_URI = process.env.MELHOR_ENVIO_REDIRECT_URI
   || "https://kynkids.vercel.app/api/melhor-envio/callback";
@@ -41,6 +40,7 @@ export const Route = createFileRoute("/api/melhor-envio/callback")({
         }
 
         try {
+          const { exchangeAuthorizationCode } = await import("@/lib/melhor-envio.server");
           await exchangeAuthorizationCode(code, REDIRECT_URI);
           return redirectToAdmin(request, "connected");
         } catch (error) {
