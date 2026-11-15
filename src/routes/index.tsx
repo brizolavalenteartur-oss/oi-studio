@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Estilo, conforto e personalidade para cada fase." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:image", content: "https://kynkids.vercel.app/images/kyn-kids-campanha.webp" },
+      { property: "og:image", content: "https://kynkids.vercel.app/images/kyn-hero.webp" },
       { name: "twitter:image", content: "https://kynkids.vercel.app/images/categoria-meninas.webp" },
     ],
   }),
@@ -66,7 +66,7 @@ function StoreHome() {
             <div className="hero-note"><span className="note-dot" /> Tamanhos do 1 ao 18</div>
           </div>
           <div className="hero-visual">
-            <img src="/images/kyn-kids-campanha.webp" alt="Duas crianças usando looks coloridos da campanha KYN KIDS em um parque" />
+            <img src="/images/kyn-hero.webp" alt="Duas crianças usando looks coloridos da campanha KYN KIDS em um parque" />
             <div className="hero-sticker"><span>FEITO PARA</span><strong>ser criança</strong><span>♡</span></div>
             <div className="hero-caption">KYN KIDS <span>·</span> INFANTO-JUVENIL</div>
           </div>
@@ -86,7 +86,7 @@ function StoreHome() {
           <div className="category-grid">
             <a className="category-tile tile-girls" href="#colecao" onClick={() => setActiveCategory("Meninas")}><img src="/images/categoria-meninas.webp" alt="Moda infantil feminina" /><span>01 / MENINAS</span><strong>Cheias de atitude <ArrowRight size={17} /></strong></a>
             <a className="category-tile tile-boys" href="#colecao" onClick={() => setActiveCategory("Meninos")}><img src="/images/categoria-meninos.webp" alt="Moda infantil masculina" /><span>02 / MENINOS</span><strong>Prontos para tudo <ArrowRight size={17} /></strong></a>
-            <a className="category-tile tile-babies" href="#colecao" onClick={() => setActiveCategory("Bebês")}><img src="/images/categoria-meninas.webp" alt="Moda infantil para os pequenos" /><span>03 / PEQUENOS</span><strong>Conforto em cada detalhe <ArrowRight size={17} /></strong></a>
+            <a className="category-tile tile-babies" href="#colecao" onClick={() => setActiveCategory("Bebês")}><img src="/images/categoria-bebes.webp" alt="Moda infantil para bebês" /><span>03 / PEQUENOS</span><strong>Conforto em cada detalhe <ArrowRight size={17} /></strong></a>
           </div>
         </section>
 
