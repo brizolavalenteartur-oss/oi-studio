@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Estilo, conforto e personalidade para cada fase." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:image", content: "https://kynkids.vercel.app/images/kyn-hero.webp" },
+      { property: "og:image", content: "https://kynkids.vercel.app/images/kyn-campanha.webp" },
       { name: "twitter:image", content: "https://kynkids.vercel.app/images/categoria-meninas.webp" },
     ],
   }),
@@ -66,7 +66,7 @@ function StoreHome() {
             <div className="hero-note"><span className="note-dot" /> Tamanhos do 1 ao 18</div>
           </div>
           <div className="hero-visual">
-            <img src="/images/kyn-hero.webp" alt="Duas crianças usando looks coloridos da campanha KYN KIDS em um parque" />
+            <img src="/images/kyn-campanha.webp" alt="Duas crianças usando looks coloridos da campanha KYN KIDS em um parque" />
             <div className="hero-sticker"><span>FEITO PARA</span><strong>ser criança</strong><span>♡</span></div>
             <div className="hero-caption">KYN KIDS <span>·</span> INFANTO-JUVENIL</div>
           </div>
