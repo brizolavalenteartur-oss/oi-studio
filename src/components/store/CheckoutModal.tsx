@@ -110,7 +110,6 @@ export function CheckoutModal({ items, onClose, onSuccess }: Props) {
             <div className="checkout-section-title"><span>03</span><h3>Como deseja receber?</h3></div>
             <div className="checkout-choice-list">
               <label><input type="radio" name="delivery" checked={deliveryMethod === "shipping"} onChange={() => setDeliveryMethod("shipping")} /><span><b>Envio para meu endereço</b><small>O valor do frete será calculado e informado antes da confirmação.</small></span></label>
-              <label><input type="radio" name="delivery" checked={deliveryMethod === "malinha"} onChange={() => setDeliveryMethod("malinha")} /><span><b>Malinha grátis · Caxias do Sul</b><small>Disponível para endereços em Caxias do Sul/RS.</small></span></label>
             </div>
             <div className="checkout-section-title"><span>04</span><h3>Forma de pagamento</h3></div>
             <div className="checkout-payment-grid">
