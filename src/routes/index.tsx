@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowDown, ArrowRight, Heart, Instagram, Search, ShoppingBag, Sparkles, Truck, X } from "lucide-react";
+import { ArrowRight, Instagram, Search, ShoppingBag, Sparkles, Truck, X } from "lucide-react";
 import { formatPrice, products, type ProductVariant, type StoreProduct } from "@/data/products";
 import { ProductCard } from "@/components/store/ProductCard";
 import { SiteHeader } from "@/components/store/SiteHeader";
