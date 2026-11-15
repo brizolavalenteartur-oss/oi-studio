@@ -16,8 +16,8 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Estilo, conforto e personalidade para cada fase." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:image", content: "https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?auto=format&fit=crop&w=1200&q=90" },
-      { name: "twitter:image", content: "https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?auto=format&fit=crop&w=1200&q=90" },
+      { property: "og:image", content: "https://kynkids.vercel.app/images/categoria-meninas.webp" },
+      { name: "twitter:image", content: "https://kynkids.vercel.app/images/categoria-meninas.webp" },
     ],
   }),
   component: StoreHome,
@@ -66,7 +66,7 @@ function StoreHome() {
             <div className="hero-note"><span className="note-dot" /> Tamanhos do 1 ao 18</div>
           </div>
           <div className="hero-visual">
-            <img src="https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?auto=format&fit=crop&w=1200&q=90" alt="Crianças aproveitando um dia ao ar livre" />
+            <div className="hero-photo-pair"><img className="hero-photo-girls" src="/images/categoria-meninas.webp" alt="Modelo infantil com look colorido" /><img className="hero-photo-boys" src="/images/categoria-meninos.webp" alt="Modelo infantil com look casual" /></div>
             <div className="hero-sticker"><span>FEITO PARA</span><strong>ser criança</strong><span>♡</span></div>
             <div className="hero-caption">KYN KIDS <span>·</span> INFANTO-JUVENIL</div>
           </div>
@@ -86,7 +86,7 @@ function StoreHome() {
           <div className="category-grid">
             <a className="category-tile tile-girls" href="#colecao" onClick={() => setActiveCategory("Meninas")}><img src="/images/categoria-meninas.webp" alt="Moda infantil feminina" /><span>01 / MENINAS</span><strong>Cheias de atitude <ArrowRight size={17} /></strong></a>
             <a className="category-tile tile-boys" href="#colecao" onClick={() => setActiveCategory("Meninos")}><img src="/images/categoria-meninos.webp" alt="Moda infantil masculina" /><span>02 / MENINOS</span><strong>Prontos para tudo <ArrowRight size={17} /></strong></a>
-            <a className="category-tile tile-babies" href="#colecao" onClick={() => setActiveCategory("Bebês")}><img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=900&q=85" alt="Roupas para bebês" /><span>03 / PEQUENOS</span><strong>Conforto em cada detalhe <ArrowRight size={17} /></strong></a>
+            <a className="category-tile tile-babies" href="#colecao" onClick={() => setActiveCategory("Bebês")}><img src="/images/categoria-meninas.webp" alt="Moda infantil para os pequenos" /><span>03 / PEQUENOS</span><strong>Conforto em cada detalhe <ArrowRight size={17} /></strong></a>
           </div>
         </section>
 
