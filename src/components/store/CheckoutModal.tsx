@@ -36,7 +36,7 @@ const initialCustomer: CustomerForm = {
 export function CheckoutModal({ items, onClose, onSuccess }: Props) {
   const [customer, setCustomer] = useState<CustomerForm>(initialCustomer);
   const [paymentMethod, setPaymentMethod] = useState<"pix" | "credit" | "debit">("pix");
-  const [deliveryMethod, setDeliveryMethod] = useState<"shipping" | "malinha">("shipping");
+  const [deliveryMethod, setDeliveryMethod] = useState<"shipping">("shipping");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
