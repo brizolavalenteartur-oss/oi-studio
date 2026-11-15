@@ -15,7 +15,6 @@ export function SiteHeader({ cartCount, onCart }: Props) {
         <nav className={menuOpen ? "main-nav is-open" : "main-nav"}>
           <a href="#colecao" onClick={() => setMenuOpen(false)}>Coleção</a>
           <a href="#categorias" onClick={() => setMenuOpen(false)}>Categorias</a>
-          <a href="#malinha" onClick={() => setMenuOpen(false)}>Malinha grátis</a>
           <a href="#sobre" onClick={() => setMenuOpen(false)}>A KYN KIDS</a>
         </nav>
         <div className="header-actions">
