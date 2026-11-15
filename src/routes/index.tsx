@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "KYN KIDS | Moda Infantil e Juvenil" },
-      { name: "description", content: "Moda infanto-juvenil do tamanho 1 ao 18. Solicite sua malinha sem custo em Caxias do Sul. Enviamos para todo o Brasil." },
+      { name: "description", content: "Moda infanto-juvenil do tamanho 1 ao 18. Enviamos para todo o Brasil." },
       { property: "og:title", content: "KYN KIDS | Moda Infantil e Juvenil" },
       { property: "og:description", content: "Estilo, conforto e personalidade para cada fase." },
       { property: "og:type", content: "website" },
@@ -62,7 +62,6 @@ function StoreHome() {
             <p>Moda infantil e juvenil feita para acompanhar cada descoberta, cada brincadeira e cada fase.</p>
             <div className="hero-buttons">
               <a href="#colecao" className="button-primary">Descobrir coleção <ArrowRight size={17} /></a>
-              <a href="#malinha" className="button-text">Conheça a malinha grátis <ArrowDown size={16} /></a>
             </div>
             <div className="hero-note"><span className="note-dot" /> Tamanhos do 1 ao 18</div>
           </div>
@@ -76,7 +75,6 @@ function StoreHome() {
 
         <section className="benefit-bar" aria-label="Benefícios da loja">
           <div><Truck size={20} /><span><b>Enviamos para todo o Brasil</b><small>Receba onde você estiver</small></span></div>
-          <div><Heart size={20} /><span><b>Malinha sem custo</b><small>Consulte a disponibilidade em Caxias do Sul</small></span></div>
           <div><Sparkles size={20} /><span><b>Do 1 ao 18</b><small>Moda para cada fase</small></span></div>
         </section>
 
@@ -107,17 +105,6 @@ function StoreHome() {
           </div>
           {filteredProducts.length === 0 && <div className="empty-state">Não encontramos resultados. Tente outra busca ou categoria.</div>}
           <p className="catalog-note">Confira os tamanhos e valores de cada peça ao selecionar o produto. A disponibilidade será confirmada pela loja após o recebimento do pedido.</p>
-        </section>
-
-        <section className="malinha-section" id="malinha">
-          <div className="malinha-image"><img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?auto=format&fit=crop&w=1100&q=90" alt="Seleção de roupas infantis" /></div>
-          <div className="malinha-copy">
-            <span className="eyebrow">UMA EXPERIÊNCIA KYN KIDS</span>
-            <h2>Seu provador,<br /><em>no seu tempo.</em></h2>
-            <p>Em Caxias do Sul, você pode solicitar sua malinha sem custo e escolher com calma as peças que mais combinam com a sua família.</p>
-            <a className="button-light" href={instagramUrl} target="_blank" rel="noreferrer">Quero solicitar minha malinha <ArrowRight size={17} /></a>
-            <small>* Consulte pelo Instagram as condições e a disponibilidade de atendimento.</small>
-          </div>
         </section>
 
         <section className="about-section section-shell" id="sobre">
