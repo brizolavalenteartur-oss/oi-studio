@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-const REDIRECT_URI = process.env.MELHOR_ENVIO_REDIRECT_URI
+const REDIRECT_URI = process.env['MELHOR_ENVIO_REDIRECT_URI']
   || "https://kynkids.vercel.app/api/melhor-envio/callback";
 
 function clearStateCookie() {

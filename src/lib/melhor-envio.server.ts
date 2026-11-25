@@ -15,7 +15,7 @@ function requiredEnv(name: string): string {
 }
 
 function tokenEndpoint(): string {
-  const environment = process.env.MELHOR_ENVIO_ENVIRONMENT === "sandbox"
+  const environment = process.env['MELHOR_ENVIO_ENVIRONMENT'] === "sandbox"
     ? "https://sandbox.melhorenvio.com.br"
     : "https://melhorenvio.com.br";
   return `${environment}/oauth/token`;
@@ -54,7 +54,7 @@ export async function exchangeAuthorizationCode(code: string, redirectUri: strin
 async function persistTokens(payload: TokenResponse) {
   const now = Date.now();
   const expiresIn = Number(payload.expires_in) || 2_592_000;
-  const { error } = await (supabaseAdmin as any).from("melhor_envio_credentials").upsert({
+  const { error } = await supabaseAdmin.from("melhor_envio_credentials").upsert({
     id: "primary",
     access_token: payload.access_token!,
     refresh_token: payload.refresh_token!,
@@ -71,7 +71,7 @@ async function persistTokens(payload: TokenResponse) {
 }
 
 export async function getValidMelhorEnvioAccessToken(): Promise<string> {
-  const { data, error } = await (supabaseAdmin as any)
+  const { data, error } = await supabaseAdmin
     .from("melhor_envio_credentials")
     .select("access_token, refresh_token, expires_at, refresh_expires_at")
     .eq("id", "primary")

@@ -1,29 +1,21 @@
-# Oi Studio
+# KYN KIDS — loja online
 
-oi
+Loja de moda infanto-juvenil: TanStack Start (React 19) + Vite + Supabase, hospedada na Vercel.
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/5b2021b6-2a3f-4406-85cc-6ba9640ee158).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Rodar localmente
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+npm install
+cp .env.example .env   # preencha com os dados do seu projeto Supabase
+npm run dev            # http://localhost:8080
 ```
 
+## Banco de dados
 
-## KYN KIDS — pedidos e painel administrativo
+As migrations ficam em `supabase/migrations/`. Aplique-as no projeto Supabase da loja (SQL Editor do painel ou `supabase db push`).
 
-Consulte [docs/ATIVAR-CHECKOUT-KYN-KIDS.md](docs/ATIVAR-CHECKOUT-KYN-KIDS.md) para aplicar o banco de pedidos, cadastrar a conta administradora e configurar o checkout. O painel privado fica em `/admin` após essa configuração.
+Consulte [docs/ATIVAR-CHECKOUT-KYN-KIDS.md](docs/ATIVAR-CHECKOUT-KYN-KIDS.md) para cadastrar a conta administradora. O painel privado fica em `/admin`.
+
+## Deploy
+
+A Vercel faz o build com `npm run build`. Cadastre as variáveis de `.env.example` em Settings → Environment Variables.

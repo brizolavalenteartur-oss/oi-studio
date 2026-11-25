@@ -1,3 +1,4 @@
+// Gerado com o gerador de tipos do Supabase (projeto kyn-kids-loja). Gere de novo após mudar o schema.
 export type Json =
   | string
   | number
@@ -14,13 +15,265 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      melhor_envio_credentials: {
+        Row: {
+          access_token: string
+          expires_at: string
+          id: string
+          refresh_expires_at: string
+          refresh_token: string
+          scope: string | null
+          token_type: string
+          updated_at: string
+        }
+        Insert: {
+          access_token: string
+          expires_at: string
+          id?: string
+          refresh_expires_at: string
+          refresh_token: string
+          scope?: string | null
+          token_type?: string
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string
+          expires_at?: string
+          id?: string
+          refresh_expires_at?: string
+          refresh_token?: string
+          scope?: string | null
+          token_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      store_admins: {
+        Row: {
+          created_at: string
+          email: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      store_catalog_variants: {
+        Row: {
+          active: boolean
+          color: string
+          product_id: string
+          product_name: string
+          size_label: string
+          stock: number
+          unit_price: number
+          variant_index: number
+        }
+        Insert: {
+          active?: boolean
+          color?: string
+          product_id: string
+          product_name: string
+          size_label: string
+          stock?: number
+          unit_price: number
+          variant_index: number
+        }
+        Update: {
+          active?: boolean
+          color?: string
+          product_id?: string
+          product_name?: string
+          size_label?: string
+          stock?: number
+          unit_price?: number
+          variant_index?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_catalog_variants_product_fk"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "store_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_order_items: {
+        Row: {
+          color: string
+          id: string
+          line_total: number
+          order_id: string
+          product_id: string
+          product_name: string
+          quantity: number
+          size_label: string
+          unit_price: number
+          variant_index: number | null
+        }
+        Insert: {
+          color?: string
+          id?: string
+          line_total: number
+          order_id: string
+          product_id: string
+          product_name: string
+          quantity: number
+          size_label: string
+          unit_price: number
+          variant_index?: number | null
+        }
+        Update: {
+          color?: string
+          id?: string
+          line_total?: number
+          order_id?: string
+          product_id?: string
+          product_name?: string
+          quantity?: number
+          size_label?: string
+          unit_price?: number
+          variant_index?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "store_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_orders: {
+        Row: {
+          address_line: string
+          address_number: string
+          city: string
+          complement: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          delivery_method: string
+          fulfillment_status: string
+          id: string
+          neighborhood: string
+          order_number: string
+          payment_method: string
+          payment_status: string
+          shipping_fee: number
+          shipping_status: string
+          state: string
+          subtotal: number
+          total: number
+          zip_code: string
+        }
+        Insert: {
+          address_line: string
+          address_number: string
+          city: string
+          complement?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          delivery_method: string
+          fulfillment_status?: string
+          id?: string
+          neighborhood: string
+          order_number?: string
+          payment_method: string
+          payment_status?: string
+          shipping_fee?: number
+          shipping_status?: string
+          state: string
+          subtotal: number
+          total: number
+          zip_code: string
+        }
+        Update: {
+          address_line?: string
+          address_number?: string
+          city?: string
+          complement?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          delivery_method?: string
+          fulfillment_status?: string
+          id?: string
+          neighborhood?: string
+          order_number?: string
+          payment_method?: string
+          payment_status?: string
+          shipping_fee?: number
+          shipping_status?: string
+          state?: string
+          subtotal?: number
+          total?: number
+          zip_code?: string
+        }
+        Relationships: []
+      }
+      store_products: {
+        Row: {
+          active: boolean
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string
+          name: string
+          position: number
+        }
+        Insert: {
+          active?: boolean
+          category: string
+          created_at?: string
+          description?: string | null
+          id: string
+          image_url: string
+          name: string
+          position?: number
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string
+          name?: string
+          position?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_store_admin: { Args: never; Returns: boolean }
+      submit_store_order: {
+        Args: {
+          p_customer: Json
+          p_delivery_method: string
+          p_items: Json
+          p_payment_method: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
@@ -36,120 +289,11 @@ type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never) = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
-    }
-    ? R
-    : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
-    : never
+  T extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"]),
+> = (DefaultSchema["Tables"] & DefaultSchema["Views"])[T] extends { Row: infer R } ? R : never
 
-export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never) = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
-    }
-    ? I
-    : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
-      }
-      ? I
-      : never
-    : never
+export type TablesInsert<T extends keyof DefaultSchema["Tables"]> =
+  DefaultSchema["Tables"][T] extends { Insert: infer I } ? I : never
 
-export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never) = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
-    }
-    ? U
-    : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
-      }
-      ? U
-      : never
-    : never
-
-export type Enums<
-  DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never) = never,
-> = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
-    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
-
-export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never) = never,
-> = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
-
-export const Constants = {
-  public: {
-    Enums: {},
-  },
-} as const
+export type TablesUpdate<T extends keyof DefaultSchema["Tables"]> =
+  DefaultSchema["Tables"][T] extends { Update: infer U } ? U : never

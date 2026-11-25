@@ -449,3 +449,45 @@ body { margin:0; font-family:'DM Sans',sans-serif; }
 }
 
 
+
+/* Estoque, quantidades e resumo do pedido */
+.variant-option:disabled, .variant-option.sold-out { opacity:.45; cursor:not-allowed; text-decoration:line-through; }
+.button-primary:disabled { opacity:.5; cursor:not-allowed; }
+.product-card.sold-out img { filter:grayscale(.7); opacity:.75; }
+.product-description { margin:0 0 12px; font-size:14px; line-height:1.5; color:#4a5b6e; }
+.bag-quantity { display:flex; align-items:center; gap:8px; margin-top:8px; }
+.bag-quantity button { display:inline-flex; align-items:center; justify-content:center; min-width:30px; height:30px; border:1px solid #d5e2ec; background:#fff; color:#12345b; border-radius:6px; cursor:pointer; }
+.bag-quantity button:disabled { opacity:.4; cursor:not-allowed; }
+.bag-quantity span { min-width:20px; text-align:center; font-weight:600; }
+.bag-quantity .bag-remove { min-width:auto; padding:0 8px; border:none; background:none; text-decoration:underline; font-size:12px; }
+.bag-warning { display:block; color:#b3261e; font-weight:600; }
+.checkout-summary { list-style:none; margin:0 0 12px; padding:0; display:grid; gap:6px; font-size:13px; color:#12345b; }
+.checkout-summary li { display:flex; justify-content:space-between; gap:12px; }
+.checkout-summary b { white-space:nowrap; }
+
+/* Painel: abas e estoque */
+.admin-tabs { display:flex; gap:8px; margin:0 0 20px; border-bottom:1px solid #d5e2ec; }
+.admin-tabs button { padding:10px 16px; border:none; background:none; color:#4a5b6e; font-weight:600; cursor:pointer; border-bottom:3px solid transparent; }
+.admin-tabs button.active { color:#12345b; border-bottom-color:#1674b8; }
+.admin-stock-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:16px; }
+.admin-stock-summary div { background:#fff; border:1px solid #d5e2ec; border-radius:10px; padding:14px; display:grid; gap:2px; }
+.admin-stock-summary b { font-size:22px; color:#12345b; }
+.admin-stock-summary small { color:#4a5b6e; }
+.admin-stock-tools { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:16px; }
+.admin-stock-tools input[type=search] { flex:1 1 220px; padding:10px 12px; border:1px solid #d5e2ec; border-radius:8px; }
+.admin-stock-list { display:grid; gap:16px; }
+.admin-stock-product { background:#fff; border:1px solid #d5e2ec; border-radius:12px; padding:14px; overflow-x:auto; }
+.admin-stock-product.inactive { opacity:.6; }
+.admin-stock-product header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.admin-stock-product header img { width:52px; height:52px; object-fit:cover; border-radius:8px; }
+.admin-stock-product header div { display:grid; flex:1; min-width:0; }
+.admin-stock-product header small { color:#4a5b6e; }
+.admin-stock-toggle { white-space:nowrap; font-size:13px; }
+.admin-stock-product table { width:100%; border-collapse:collapse; font-size:13px; min-width:520px; }
+.admin-stock-product th { text-align:left; color:#4a5b6e; font-weight:600; padding:6px; border-bottom:1px solid #e4eaf1; }
+.admin-stock-product td { padding:6px; border-bottom:1px solid #f0f3f7; }
+.admin-stock-product tr.out td:first-child::after { content:" · esgotado"; color:#b3261e; font-weight:600; }
+.admin-stock-product td input:not([type=checkbox]) { width:90px; padding:6px 8px; border:1px solid #d5e2ec; border-radius:6px; }
+.admin-stock-product td button, .admin-stock-add { display:inline-flex; align-items:center; gap:4px; padding:6px 10px; border:1px solid #1674b8; background:#eaf5ff; color:#12345b; border-radius:6px; cursor:pointer; }
+.admin-stock-product td button:disabled { opacity:.35; cursor:default; }
+.admin-stock-add { margin-top:10px; }

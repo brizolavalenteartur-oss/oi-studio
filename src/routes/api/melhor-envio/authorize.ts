@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 
-const REDIRECT_URI = process.env.MELHOR_ENVIO_REDIRECT_URI
+const REDIRECT_URI = process.env['MELHOR_ENVIO_REDIRECT_URI']
   || "https://kynkids.vercel.app/api/melhor-envio/callback";
 
 export const Route = createFileRoute("/api/melhor-envio/authorize")({
@@ -17,10 +17,10 @@ export const Route = createFileRoute("/api/melhor-envio/authorize")({
             return Response.json({ error: "Faça login como administradora para conectar o Melhor Envio." }, { status: 401 });
           }
 
-          const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-          const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-          const clientId = process.env.MELHOR_ENVIO_CLIENT_ID;
-          if (!supabaseUrl || !publishableKey || !clientId || !process.env.MELHOR_ENVIO_CLIENT_SECRET || !process.env.MELHOR_ENVIO_USER_AGENT || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          const supabaseUrl = process.env['SUPABASE_URL'] || process.env['VITE_SUPABASE_URL'];
+          const publishableKey = process.env['SUPABASE_PUBLISHABLE_KEY'] || process.env['VITE_SUPABASE_PUBLISHABLE_KEY'];
+          const clientId = process.env['MELHOR_ENVIO_CLIENT_ID'];
+          if (!supabaseUrl || !publishableKey || !clientId || !process.env['MELHOR_ENVIO_CLIENT_SECRET'] || !process.env['MELHOR_ENVIO_USER_AGENT'] || !process.env['SUPABASE_SERVICE_ROLE_KEY']) {
             return Response.json({
               error: "Falta configurar variáveis privadas do servidor no Vercel: SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_SERVICE_ROLE_KEY, MELHOR_ENVIO_CLIENT_ID, MELHOR_ENVIO_CLIENT_SECRET e MELHOR_ENVIO_USER_AGENT.",
             }, { status: 503 });
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/api/melhor-envio/authorize")({
           }
 
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          const { data: admin, error: adminError } = await (supabaseAdmin as any)
+          const { data: admin, error: adminError } = await supabaseAdmin
             .from("store_admins")
             .select("user_id")
             .eq("user_id", userId)
@@ -46,7 +46,7 @@ export const Route = createFileRoute("/api/melhor-envio/authorize")({
           }
 
           const state = crypto.randomUUID();
-          const baseUrl = process.env.MELHOR_ENVIO_ENVIRONMENT === "sandbox"
+          const baseUrl = process.env['MELHOR_ENVIO_ENVIRONMENT'] === "sandbox"
             ? "https://sandbox.melhorenvio.com.br"
             : "https://melhorenvio.com.br";
           const authorizationUrl = new URL("/oauth/authorize", baseUrl);
