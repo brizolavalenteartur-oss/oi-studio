@@ -1,23 +1,13 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Instagram,
-  Minus,
-  Plus,
-  Search,
-  ShoppingBag,
-  Sparkles,
-  Truck,
-  X,
-} from "lucide-react";
-import { fetchCatalog, formatPrice, variantLabel, type StoreProduct } from "@/data/products";
-import { useCart } from "@/lib/cart";
+import { ArrowRight, Instagram, Search, Sparkles, Truck, X } from "lucide-react";
+import { fetchCatalog, startingPrice, type StoreProduct } from "@/data/products";
 import { ProductCard } from "@/components/store/ProductCard";
-import { SiteHeader } from "@/components/store/SiteHeader";
-import { SiteFooter } from "@/components/store/SiteFooter";
-import { CheckoutModal } from "@/components/store/CheckoutModal";
+import { ShopLayout } from "@/components/store/ShopLayout";
+import { VariantPicker } from "@/components/store/VariantPicker";
+import { INSTAGRAM_URL, SITE_URL, absoluteUrl } from "@/lib/site";
+
+const SHARE_IMAGE = absoluteUrl("/images/kyn-campanha.webp");
 
 export const Route = createFileRoute("/")({
   loader: () => fetchCatalog(),
@@ -33,29 +23,43 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "KYN KIDS | Moda Infantil e Juvenil" },
       { property: "og:description", content: "Estilo, conforto e personalidade para cada fase." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:image", content: SHARE_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:image", content: "https://kynkids.vercel.app/images/kyn-campanha.webp" },
-      {
-        name: "twitter:image",
-        content: "https://kynkids.vercel.app/images/categoria-meninas.webp",
-      },
+      { name: "twitter:image", content: SHARE_IMAGE },
     ],
+    links: [{ rel: "canonical", href: SITE_URL }],
   }),
   component: StoreHome,
 });
 
 const categories = ["Todas", "Meninas", "Meninos", "Bebês", "Conjuntos"];
+type SortOrder = "relevance" | "price-asc" | "price-desc";
+
+/** Ordena tamanhos: letras de bebê (RN, P, M, G, GG) antes dos números. */
+const sizeRank = (size: string) => {
+  const letters = ["RN", "P", "M", "G", "GG"];
+  const i = letters.indexOf(size);
+  if (i >= 0) return i - 10;
+  const n = Number(size);
+  return Number.isFinite(n) ? n : 100;
+};
 
 function StoreHome() {
+  const products = Route.useLoaderData();
+  return (
+    <ShopLayout products={products}>
+      <StoreContent products={products} />
+    </ShopLayout>
+  );
+}
+
+function StoreContent({ products }: { products: StoreProduct[] }) {
   const [activeCategory, setActiveCategory] = useState("Todas");
   const [search, setSearch] = useState("");
-  const products = Route.useLoaderData();
-  const router = useRouter();
-  const cart = useCart(products);
-  const [bagOpen, setBagOpen] = useState(false);
+  const [size, setSize] = useState("");
+  const [sort, setSort] = useState<SortOrder>("relevance");
   const [selected, setSelected] = useState<StoreProduct | null>(null);
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState<number | null>(null);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   // Abrir /#colecao (ou outra âncora) rola até a seção depois que a página monta.
   useEffect(() => {
@@ -63,47 +67,31 @@ function StoreHome() {
     if (id) document.getElementById(id)?.scrollIntoView({ behavior: "instant" });
   }, []);
 
-  const filteredProducts = useMemo(
-    () =>
-      products.filter((product) => {
-        const matchesCategory = activeCategory === "Todas" || product.category === activeCategory;
-        const matchesSearch = `${product.name} ${product.category}`
-          .toLowerCase()
-          .includes(search.toLowerCase());
-        return matchesCategory && matchesSearch;
-      }),
-    [products, activeCategory, search],
-  );
+  // Tamanhos com estoque em pelo menos uma peça.
+  const sizes = useMemo(() => {
+    const set = new Set<string>();
+    products.forEach((p) => p.variants.forEach((v) => v.stock > 0 && set.add(v.size)));
+    return [...set].sort((a, b) => sizeRank(a) - sizeRank(b));
+  }, [products]);
 
-  const openProduct = (product: StoreProduct) => {
-    const firstAvailable = product.variants.find((variant) => variant.stock > 0);
-    setSelectedVariantIndex(firstAvailable?.index ?? null);
-    setSelected(product);
-  };
+  const filteredProducts = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    const list = products.filter((product) => {
+      if (activeCategory !== "Todas" && product.category !== activeCategory) return false;
+      if (term && !`${product.name} ${product.category}`.toLowerCase().includes(term)) return false;
+      if (size && !product.variants.some((v) => v.size === size && v.stock > 0)) return false;
+      return true;
+    });
+    if (sort === "price-asc") list.sort((a, b) => startingPrice(a) - startingPrice(b));
+    if (sort === "price-desc") list.sort((a, b) => startingPrice(b) - startingPrice(a));
+    return list;
+  }, [products, activeCategory, search, size, sort]);
 
-  const quantityInBag = (productId: string, variantIndex: number) =>
-    cart.lines.find((line) => line.product.id === productId && line.variant.index === variantIndex)
-      ?.quantity ?? 0;
-
-  const selectedVariant =
-    selected?.variants.find((variant) => variant.index === selectedVariantIndex) ?? null;
-  const canAddSelected =
-    !!selected &&
-    !!selectedVariant &&
-    quantityInBag(selected.id, selectedVariant.index) < selectedVariant.stock;
-
-  const addSelectedToBag = () => {
-    if (!selected || !selectedVariant || !canAddSelected) return;
-    cart.add(selected.id, selectedVariant.index);
-    setSelected(null);
-    setBagOpen(true);
-  };
-  const instagramUrl = "https://www.instagram.com/kynkidsmoda/";
+  const hasFilters =
+    activeCategory !== "Todas" || search !== "" || size !== "" || sort !== "relevance";
 
   return (
-    <div className="kyn-store" id="inicio">
-      <SiteHeader cartCount={cart.count} onCart={() => setBagOpen(true)} />
-
+    <>
       <main>
         <section className="hero-section">
           <div className="hero-copy">
@@ -234,20 +222,59 @@ function StoreHome() {
               <button
                 key={category}
                 className={activeCategory === category ? "filter-chip active" : "filter-chip"}
+                aria-pressed={activeCategory === category}
                 onClick={() => setActiveCategory(category)}
               >
                 {category}
               </button>
             ))}
           </div>
+          <div className="filter-bar">
+            <label>
+              Tamanho
+              <select value={size} onChange={(event) => setSize(event.target.value)}>
+                <option value="">Todos</option>
+                {sizes.map((value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Ordenar
+              <select value={sort} onChange={(event) => setSort(event.target.value as SortOrder)}>
+                <option value="relevance">Destaques</option>
+                <option value="price-asc">Menor preço</option>
+                <option value="price-desc">Maior preço</option>
+              </select>
+            </label>
+            <span className="filter-count" aria-live="polite">
+              {filteredProducts.length} {filteredProducts.length === 1 ? "peça" : "peças"}
+            </span>
+            {hasFilters && (
+              <button
+                type="button"
+                className="filter-clear"
+                onClick={() => {
+                  setActiveCategory("Todas");
+                  setSearch("");
+                  setSize("");
+                  setSort("relevance");
+                }}
+              >
+                Limpar filtros
+              </button>
+            )}
+          </div>
           <div className="products-grid">
             {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} onSelect={openProduct} />
+              <ProductCard key={product.id} product={product} onSelect={setSelected} />
             ))}
           </div>
           {filteredProducts.length === 0 && (
             <div className="empty-state">
-              Não encontramos resultados. Tente outra busca ou categoria.
+              Não encontramos resultados. Tente outra busca, tamanho ou categoria.
             </div>
           )}
           <p className="catalog-note">
@@ -276,8 +303,6 @@ function StoreHome() {
         </section>
       </main>
 
-      <SiteFooter />
-
       {selected && (
         <div className="modal-backdrop" role="presentation" onClick={() => setSelected(null)}>
           <div
@@ -297,178 +322,21 @@ function StoreHome() {
               {selected.description && (
                 <p className="product-description">{selected.description}</p>
               )}
-              <p className="variant-label">Escolha o tamanho e confira o valor:</p>
-              <div className="variant-options">
-                {selected.variants.map((variant) => {
-                  const soldOut = variant.stock <= 0;
-                  return (
-                    <button
-                      type="button"
-                      key={variant.index}
-                      disabled={soldOut}
-                      aria-pressed={selectedVariantIndex === variant.index}
-                      className={[
-                        "variant-option",
-                        selectedVariantIndex === variant.index ? "selected" : "",
-                        soldOut ? "sold-out" : "",
-                      ]
-                        .join(" ")
-                        .trim()}
-                      onClick={() => setSelectedVariantIndex(variant.index)}
-                    >
-                      <span>
-                        Tamanho {variantLabel(variant)}
-                        {soldOut ? " · esgotado" : variant.stock === 1 ? " · última peça" : ""}
-                      </span>
-                      <b>{formatPrice(variant.price)}</b>
-                    </button>
-                  );
-                })}
-              </div>
-              {!selectedVariant && (
-                <p className="modal-availability">
-                  Todos os tamanhos desta peça estão esgotados no momento.
-                </p>
-              )}
-              {selectedVariant && !canAddSelected && (
-                <p className="modal-availability">
-                  Você já colocou na sacola todas as unidades disponíveis deste tamanho.
-                </p>
-              )}
-              <button
-                className="button-primary full-button"
-                disabled={!canAddSelected}
-                onClick={addSelectedToBag}
-              >
-                Adicionar à sacola <ShoppingBag size={17} />
-              </button>
-              <a className="modal-instagram" href={instagramUrl} target="_blank" rel="noreferrer">
+              <VariantPicker
+                key={selected.id}
+                product={selected}
+                onAdded={() => setSelected(null)}
+              />
+              <Link className="modal-instagram" to="/produto/$id" params={{ id: selected.id }}>
+                Ver página da peça <ArrowRight size={15} />
+              </Link>
+              <a className="modal-instagram" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
                 <Instagram size={16} /> Ver Instagram da KYN KIDS
               </a>
             </div>
           </div>
         </div>
       )}
-
-      {bagOpen && (
-        <div className="drawer-backdrop" onClick={() => setBagOpen(false)}>
-          <aside className="bag-drawer" onClick={(event) => event.stopPropagation()}>
-            <div className="drawer-heading">
-              <div>
-                <span className="eyebrow">SUA SELEÇÃO</span>
-                <h3>
-                  Sacola <span>({cart.count})</span>
-                </h3>
-              </div>
-              <button className="drawer-continue" onClick={() => setBagOpen(false)}>
-                <ArrowLeft size={15} /> Continuar comprando
-              </button>
-            </div>
-            {cart.lines.length === 0 ? (
-              <div className="bag-empty">
-                <ShoppingBag size={34} />
-                <p>Sua sacola está vazia.</p>
-                <button className="button-primary" onClick={() => setBagOpen(false)}>
-                  Explorar coleção
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="bag-items">
-                  {cart.lines.map(({ product, variant, quantity }) => (
-                    <div className="bag-item" key={`${product.id}-${variant.index}`}>
-                      <img src={product.image} alt="" />
-                      <div>
-                        <b>{product.name}</b>
-                        <small>
-                          Tamanho {variantLabel(variant)} · {formatPrice(variant.price)}
-                        </small>
-                        {quantity > variant.stock && (
-                          <small className="bag-warning">
-                            {variant.stock === 0
-                              ? "Esgotou — remova da sacola"
-                              : `Só restam ${variant.stock}`}
-                          </small>
-                        )}
-                        <div
-                          className="bag-quantity"
-                          role="group"
-                          aria-label={`Quantidade de ${product.name}`}
-                        >
-                          <button
-                            type="button"
-                            aria-label="Diminuir"
-                            onClick={() =>
-                              cart.setQuantity(product.id, variant.index, quantity - 1)
-                            }
-                          >
-                            <Minus size={14} />
-                          </button>
-                          <span aria-live="polite">{quantity}</span>
-                          <button
-                            type="button"
-                            aria-label="Aumentar"
-                            disabled={quantity >= variant.stock}
-                            onClick={() =>
-                              cart.setQuantity(product.id, variant.index, quantity + 1)
-                            }
-                          >
-                            <Plus size={14} />
-                          </button>
-                          <button
-                            type="button"
-                            className="bag-remove"
-                            onClick={() => cart.setQuantity(product.id, variant.index, 0)}
-                          >
-                            Remover
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="bag-checkout">
-                  <div className="bag-total">
-                    <span>Total dos produtos</span>
-                    <strong>{formatPrice(cart.total)}</strong>
-                  </div>
-                  <button
-                    className="button-primary full-button"
-                    disabled={cart.problems.length > 0}
-                    onClick={() => {
-                      setBagOpen(false);
-                      setCheckoutOpen(true);
-                    }}
-                  >
-                    Finalizar compra <ArrowRight size={17} />
-                  </button>
-                  <p className="payment-notice">
-                    {cart.problems.length > 0
-                      ? "Ajuste os itens sem estoque para continuar."
-                      : "Informe seus dados e endereço para registrar o pedido diretamente na loja."}
-                  </p>
-                </div>
-              </>
-            )}
-          </aside>
-        </div>
-      )}
-      {checkoutOpen && (
-        <CheckoutModal
-          items={cart.lines}
-          onClose={() => {
-            setCheckoutOpen(false);
-            void router.invalidate();
-          }}
-          onSuccess={() => {
-            cart.clear();
-            void router.invalidate();
-          }}
-          onStockError={() => {
-            void router.invalidate();
-          }}
-        />
-      )}
-    </div>
+    </>
   );
 }

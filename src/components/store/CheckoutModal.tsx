@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice, variantLabel } from "@/data/products";
 import type { CartLine } from "@/lib/cart";
+import { isValidCpf, lookupCep, maskCep, maskCpf, maskPhone, onlyDigits } from "@/lib/br";
 import { ArrowLeft, CheckCircle2, LoaderCircle, X } from "lucide-react";
 
 type Props = {
@@ -16,6 +17,7 @@ type CustomerForm = {
   name: string;
   email: string;
   phone: string;
+  cpf: string;
   zip_code: string;
   address_line: string;
   address_number: string;
@@ -29,14 +31,17 @@ const initialCustomer: CustomerForm = {
   name: "",
   email: "",
   phone: "",
+  cpf: "",
   zip_code: "",
   address_line: "",
   address_number: "",
   complement: "",
   neighborhood: "",
-  city: "Caxias do Sul",
-  state: "RS",
+  city: "",
+  state: "",
 };
+
+type CepStatus = "idle" | "loading" | "found" | "not-found";
 
 export function CheckoutModal({ items, onClose, onSuccess, onStockError }: Props) {
   const [customer, setCustomer] = useState<CustomerForm>(initialCustomer);
@@ -47,13 +52,54 @@ export function CheckoutModal({ items, onClose, onSuccess, onStockError }: Props
   const [orderNumber, setOrderNumber] = useState("");
   const total = items.reduce((sum, item) => sum + item.variant.price * item.quantity, 0);
 
+  const [cepStatus, setCepStatus] = useState<CepStatus>("idle");
+  const numberRef = useRef<HTMLInputElement>(null);
+  const cpfInvalid =
+    customer.cpf.length > 0 && onlyDigits(customer.cpf).length === 11 && !isValidCpf(customer.cpf);
+
   const update = (field: keyof CustomerForm, value: string) => {
     setCustomer((current) => ({ ...current, [field]: value }));
   };
 
+  // Ao completar o CEP, busca rua, bairro, cidade e UF no ViaCEP.
+  const cepDigits = onlyDigits(customer.zip_code);
+  useEffect(() => {
+    if (cepDigits.length !== 8) {
+      setCepStatus("idle");
+      return;
+    }
+    const controller = new AbortController();
+    setCepStatus("loading");
+    void lookupCep(cepDigits, controller.signal).then((address) => {
+      if (controller.signal.aborted) return;
+      if (!address) {
+        setCepStatus("not-found");
+        return;
+      }
+      setCustomer((current) => ({
+        ...current,
+        address_line: address.street || current.address_line,
+        neighborhood: address.neighborhood || current.neighborhood,
+        city: address.city,
+        state: address.state,
+      }));
+      setCepStatus("found");
+      numberRef.current?.focus();
+    });
+    return () => controller.abort();
+  }, [cepDigits]);
+
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
+    if (!isValidCpf(customer.cpf)) {
+      setError("Confira o CPF: os números não conferem.");
+      return;
+    }
+    if (onlyDigits(customer.phone).length < 10) {
+      setError("Informe o telefone com DDD.");
+      return;
+    }
     setLoading(true);
     try {
       const { data, error: submitError } = await supabase.rpc("submit_store_order", {
@@ -154,9 +200,28 @@ export function CheckoutModal({ items, onClose, onSuccess, onStockError }: Props
                   required
                   type="tel"
                   autoComplete="tel"
+                  inputMode="numeric"
+                  placeholder="(54) 99999-9999"
                   value={customer.phone}
-                  onChange={(e) => update("phone", e.target.value)}
+                  onChange={(e) => update("phone", maskPhone(e.target.value))}
                 />
+              </label>
+              <label>
+                CPF
+                <input
+                  required
+                  inputMode="numeric"
+                  placeholder="000.000.000-00"
+                  aria-invalid={cpfInvalid}
+                  aria-describedby="cpf-help"
+                  value={customer.cpf}
+                  onChange={(e) => update("cpf", maskCpf(e.target.value))}
+                />
+                <small id="cpf-help" className={cpfInvalid ? "field-hint error" : "field-hint"}>
+                  {cpfInvalid
+                    ? "CPF inválido — confira os números."
+                    : "Necessário para a etiqueta de envio e a nota fiscal."}
+                </small>
               </label>
             </div>
             <div className="checkout-section-title">
@@ -172,9 +237,29 @@ export function CheckoutModal({ items, onClose, onSuccess, onStockError }: Props
                   inputMode="numeric"
                   maxLength={9}
                   placeholder="00000-000"
+                  aria-describedby="cep-help"
                   value={customer.zip_code}
-                  onChange={(e) => update("zip_code", e.target.value)}
+                  onChange={(e) => update("zip_code", maskCep(e.target.value))}
                 />
+                <small
+                  id="cep-help"
+                  className={cepStatus === "not-found" ? "field-hint error" : "field-hint"}
+                  aria-live="polite"
+                >
+                  {cepStatus === "loading" && "Buscando endereço..."}
+                  {cepStatus === "found" && "Endereço preenchido. Confira e informe o número."}
+                  {cepStatus === "not-found" &&
+                    "CEP não encontrado — preencha o endereço manualmente."}
+                  {cepStatus === "idle" && (
+                    <a
+                      href="https://buscacepinter.correios.com.br/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Não sei meu CEP
+                    </a>
+                  )}
+                </small>
               </label>
               <label>
                 Estado (UF)
@@ -183,7 +268,9 @@ export function CheckoutModal({ items, onClose, onSuccess, onStockError }: Props
                   maxLength={2}
                   autoComplete="address-level1"
                   value={customer.state}
-                  onChange={(e) => update("state", e.target.value.toUpperCase())}
+                  onChange={(e) =>
+                    update("state", e.target.value.replace(/[^a-z]/gi, "").toUpperCase())
+                  }
                 />
               </label>
               <label className="field-wide">
@@ -199,6 +286,7 @@ export function CheckoutModal({ items, onClose, onSuccess, onStockError }: Props
                 Número
                 <input
                   required
+                  ref={numberRef}
                   value={customer.address_number}
                   onChange={(e) => update("address_number", e.target.value)}
                 />

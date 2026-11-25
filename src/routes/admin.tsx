@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/data/products";
@@ -13,6 +13,7 @@ type Order = {
   customer_name: string;
   customer_email: string;
   customer_phone: string;
+  customer_document: string | null;
   zip_code: string;
   address_line: string;
   address_number: string;
@@ -49,6 +50,32 @@ function AdminPage() {
   const [connectingShipping, setConnectingShipping] = useState(false);
   const [shippingMessage, setShippingMessage] = useState("");
   const [tab, setTab] = useState<"orders" | "stock">("orders");
+  const [orderSearch, setOrderSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("open");
+
+  const visibleOrders = useMemo(() => {
+    const term = orderSearch.trim().toLowerCase();
+    const digits = term.replace(/\D/g, "");
+    return orders.filter((order) => {
+      if (statusFilter === "open" && ["delivered", "cancelled"].includes(order.fulfillment_status))
+        return false;
+      if (
+        statusFilter !== "open" &&
+        statusFilter !== "all" &&
+        order.fulfillment_status !== statusFilter
+      )
+        return false;
+      if (!term) return true;
+      const text =
+        `${order.order_number} ${order.customer_name} ${order.customer_email} ${order.city}`.toLowerCase();
+      const numbers =
+        `${order.customer_phone} ${order.customer_document ?? ""} ${order.zip_code}`.replace(
+          /\D/g,
+          "",
+        );
+      return text.includes(term) || (digits.length >= 3 && numbers.includes(digits));
+    });
+  }, [orders, orderSearch, statusFilter]);
 
   const loadOrders = async () => {
     setLoading(true);
@@ -250,13 +277,39 @@ function AdminPage() {
           ) : (
             <>
               {error && <p className="admin-error">{error}</p>}
+              <div className="admin-stock-tools">
+                <input
+                  type="search"
+                  placeholder="Buscar por pedido, nome, e-mail, telefone ou CPF..."
+                  aria-label="Buscar pedidos"
+                  value={orderSearch}
+                  onChange={(e) => setOrderSearch(e.target.value)}
+                />
+                <label>
+                  Mostrar{" "}
+                  <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                    <option value="open">Em aberto</option>
+                    <option value="all">Todos</option>
+                    <option value="received">Recebidos</option>
+                    <option value="preparing">Separando</option>
+                    <option value="shipped">Enviados</option>
+                    <option value="delivered">Entregues</option>
+                    <option value="cancelled">Cancelados</option>
+                  </select>
+                </label>
+                <span className="filter-count">
+                  {visibleOrders.length} de {orders.length} pedido(s)
+                </span>
+              </div>
               {loading ? (
                 <p>Carregando pedidos...</p>
               ) : orders.length === 0 ? (
                 <div className="admin-empty">Nenhum pedido recebido ainda.</div>
+              ) : visibleOrders.length === 0 ? (
+                <div className="admin-empty">Nenhum pedido com esses filtros.</div>
               ) : (
                 <div className="admin-orders">
-                  {orders.map((order) => (
+                  {visibleOrders.map((order) => (
                     <article className="admin-order" key={order.id}>
                       <header>
                         <div>
@@ -270,7 +323,27 @@ function AdminPage() {
                           <h3>Cliente</h3>
                           <p>{order.customer_name}</p>
                           <p>{order.customer_email}</p>
-                          <p>{order.customer_phone}</p>
+                          <p>
+                            {order.customer_phone}{" "}
+                            {order.customer_phone.replace(/\D/g, "").length >= 10 && (
+                              <a
+                                href={`https://wa.me/55${order.customer_phone.replace(/\D/g, "")}?text=${encodeURIComponent(`Olá! Aqui é da KYN KIDS, sobre o seu pedido ${order.order_number}.`)}`}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                (WhatsApp)
+                              </a>
+                            )}
+                          </p>
+                          {order.customer_document && (
+                            <p>
+                              CPF{" "}
+                              {order.customer_document.replace(
+                                /^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+                                "$1.$2.$3-$4",
+                              )}
+                            </p>
+                          )}
                         </div>
                         <div>
                           <h3>Entrega</h3>
