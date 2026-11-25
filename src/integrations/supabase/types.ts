@@ -163,6 +163,7 @@ export type Database = {
           created_at: string
           customer_email: string
           customer_name: string
+          customer_document: string | null
           customer_phone: string
           delivery_method: string
           fulfillment_status: string
@@ -186,6 +187,7 @@ export type Database = {
           created_at?: string
           customer_email: string
           customer_name: string
+          customer_document?: string | null
           customer_phone: string
           delivery_method: string
           fulfillment_status?: string
@@ -209,6 +211,7 @@ export type Database = {
           created_at?: string
           customer_email?: string
           customer_name?: string
+          customer_document?: string | null
           customer_phone?: string
           delivery_method?: string
           fulfillment_status?: string
@@ -265,6 +268,7 @@ export type Database = {
     }
     Functions: {
       is_store_admin: { Args: never; Returns: boolean }
+      is_valid_cpf: { Args: { p_cpf: string }; Returns: boolean }
       submit_store_order: {
         Args: {
           p_customer: Json

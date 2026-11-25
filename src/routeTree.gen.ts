@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 import { Route as ApiMelhorEnvioAuthorizeRouteImport } from './routes/api/melhor-envio/authorize'
 import { Route as ApiMelhorEnvioCallbackRouteImport } from './routes/api/melhor-envio/callback'
 
@@ -22,6 +24,16 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProdutoIdRoute = ProdutoIdRouteImport.update({
+  id: '/produto/$id',
+  path: '/produto/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMelhorEnvioAuthorizeRoute = ApiMelhorEnvioAuthorizeRouteImport.update({
@@ -38,12 +50,16 @@ const ApiMelhorEnvioCallbackRoute = ApiMelhorEnvioCallbackRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/produto/$id': typeof ProdutoIdRoute
   '/api/melhor-envio/authorize': typeof ApiMelhorEnvioAuthorizeRoute
   '/api/melhor-envio/callback': typeof ApiMelhorEnvioCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/produto/$id': typeof ProdutoIdRoute
   '/api/melhor-envio/authorize': typeof ApiMelhorEnvioAuthorizeRoute
   '/api/melhor-envio/callback': typeof ApiMelhorEnvioCallbackRoute
 }
@@ -51,6 +67,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/produto/$id': typeof ProdutoIdRoute
   '/api/melhor-envio/authorize': typeof ApiMelhorEnvioAuthorizeRoute
   '/api/melhor-envio/callback': typeof ApiMelhorEnvioCallbackRoute
 }
@@ -59,18 +77,24 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/sitemap.xml'
+    | '/produto/$id'
     | '/api/melhor-envio/authorize'
     | '/api/melhor-envio/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
+    | '/sitemap.xml'
+    | '/produto/$id'
     | '/api/melhor-envio/authorize'
     | '/api/melhor-envio/callback'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/sitemap.xml'
+    | '/produto/$id'
     | '/api/melhor-envio/authorize'
     | '/api/melhor-envio/callback'
   fileRoutesById: FileRoutesById
@@ -78,6 +102,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ProdutoIdRoute: typeof ProdutoIdRoute
   ApiMelhorEnvioAuthorizeRoute: typeof ApiMelhorEnvioAuthorizeRoute
   ApiMelhorEnvioCallbackRoute: typeof ApiMelhorEnvioCallbackRoute
 }
@@ -96,6 +122,20 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produto/$id': {
+      id: '/produto/$id'
+      path: '/produto/$id'
+      fullPath: '/produto/$id'
+      preLoaderRoute: typeof ProdutoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/melhor-envio/authorize': {
@@ -118,6 +158,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ProdutoIdRoute: ProdutoIdRoute,
   ApiMelhorEnvioAuthorizeRoute: ApiMelhorEnvioAuthorizeRoute,
   ApiMelhorEnvioCallbackRoute: ApiMelhorEnvioCallbackRoute,
 }
