@@ -4,10 +4,11 @@ O código do checkout e do painel está no repositório. Para receber pedidos re
 
 ## 1. Aplicar o banco de dados
 
-1. Abra o projeto Supabase conectado à KYN KIDS.
-2. Entre em **SQL Editor**.
-3. Abra o arquivo `supabase/migrations/20261113000100_kyn_kids_orders.sql` no GitHub.
-4. Copie todo o SQL e execute no SQL Editor.
+O projeto Supabase da loja é o `kyn-kids-loja` (região São Paulo), e as migrations já foram aplicadas nele. Para recriar o banco em outro projeto, execute no **SQL Editor**, nesta ordem, os arquivos de `supabase/migrations/`:
+
+1. `20261113000100_kyn_kids_orders.sql`
+2. `20261114000100_melhor_envio_credentials.sql`
+3. `20261125000100_estoque.sql`
 
 A migração cria:
 - Catálogo de preços e tamanhos usado para validar os itens do pedido no servidor.
@@ -47,6 +48,6 @@ O painel ficará disponível em `/admin`. Somente usuários cadastrados em `stor
 
 **Frete:** o pedido salva o endereço e fica com frete pendente de cálculo. Para mostrar preço de entrega automaticamente e emitir etiquetas, será necessária integração com Correios ou um intermediador logístico, com as credenciais correspondentes.
 
-**Estoque:** o catálogo atual informa tamanhos e preços, mas ainda não controla unidades disponíveis em estoque. A confirmação de disponibilidade continua sendo uma etapa da loja.
+**Estoque:** já está ativo (migration `20261125000100_estoque.sql`). Cada variante é um tamanho + uma cor, com quantidade própria. O pedido baixa o estoque no banco, na mesma transação, e recusa o pedido quando falta peça. Cancelar um pedido no painel devolve as peças ao estoque. As quantidades, preços e tamanhos são ajustados na aba **Estoque** do `/admin`. O estoque inicial foi cadastrado como 1 unidade por tamanho: confira e corrija as quantidades reais.
 
 Não anuncie o checkout como pagamento concluído até que o provedor de pagamento esteja integrado e testado em ambiente de homologação.

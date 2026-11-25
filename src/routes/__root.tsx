@@ -11,7 +11,6 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
@@ -36,10 +35,9 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
-  console.error(error);
   const router = useRouter();
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    console.error(error);
   }, [error]);
 
   return (
@@ -82,7 +80,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "KYN KIDS | Moda Infantil e Juvenil" },
-      { name: "description", content: "Moda infanto-juvenil do tamanho 1 ao 18. Solicite sua malinha sem custo em Caxias do Sul. Enviamos para todo o Brasil." },
+      {
+        name: "description",
+        content:
+          "Moda infanto-juvenil do tamanho 1 ao 18. Solicite sua malinha sem custo em Caxias do Sul. Enviamos para todo o Brasil.",
+      },
       { name: "author", content: "KYN KIDS" },
       { property: "og:title", content: "KYN KIDS | Moda Infantil e Juvenil" },
       { property: "og:description", content: "Estilo, conforto e personalidade para cada fase." },
@@ -93,7 +95,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
