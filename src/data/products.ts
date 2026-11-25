@@ -26,6 +26,24 @@ export const formatPrice = (value: number) =>
 export const variantLabel = (variant: Pick<ProductVariant, "size" | "color">) =>
   variant.color ? `${variant.size} · ${variant.color}` : variant.size;
 
+/** Ordena tamanhos: letras de bebê (RN, P, M, G, GG) antes dos números. */
+export const sizeRank = (size: string) => {
+  const letters = ["RN", "P", "M", "G", "GG"];
+  const i = letters.indexOf(size);
+  if (i >= 0) return i - 10;
+  const n = Number(size);
+  return Number.isFinite(n) ? n : 100;
+};
+
+/** Tamanhos com estoque, sem repetir, em ordem. */
+export const availableSizes = (product: StoreProduct) =>
+  [...new Set(product.variants.filter((v) => v.stock > 0).map((v) => v.size))].sort(
+    (a, b) => sizeRank(a) - sizeRank(b),
+  );
+
+export const totalStock = (product: StoreProduct) =>
+  product.variants.reduce((sum, variant) => sum + Math.max(0, variant.stock), 0);
+
 export const inStock = (product: StoreProduct) =>
   product.variants.some((variant) => variant.stock > 0);
 
